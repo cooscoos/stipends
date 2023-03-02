@@ -4,81 +4,91 @@ from pathlib import Path
 import pandas as pd
 import math
 
+from enum import Enum
+class Wage(str,Enum):
+    """Enum:
+
+    - NLW: UKGov's National Living / Minimum Wage rate
+    - RLW: Real living wage foundation's Real Living Wage rate
+    - STI: UKRI's minumum annual PhD stipend"""
+
+    NLW = "nmw"
+    RLW = "rlw"
+    STP = "stipend"
 
 
-def net_income(gross_rate: float, allowance: int, counc_tax: int) -> int:
+def net_income_df(df: pd.DataFrame, wage: Wage) -> pd.DataFrame:
     """Returns the net annual income after income tax, national insurance, and typical council tax payments,
     assuming that all income tax is paid at the lowest rate (20%). Valid for years 2012 and beyond.
     
     
     Parameters
     -------
-    gross_rate: float
-        Hourly rate (£/hr) from employment prior to tax deductions.
+    df: pd.DataFrame
+        Income data. Must contain a rate, counctax, and allowance fields.
 
-    allowance: int
-        Personal allowance (£) for that year.
-        
-    counc_tax: int
-        Annual council tax for that year.
+    wage: WageType
+        Either national minimum / real living 
+    
+    base_year: int
+        The year to adjust real value to (usually the present year)
+
 
     Returns
     -------
-    Estimated net annual income after deductions.
+    df with of net real annual income for each year after any deductions.
 
     """
 
-    if math.isnan(gross_rate):
-        return math.nan
+    match wage:
+        case Wage.NLW | Wage.RLW:
+            # Assume ~37.5 hrs/wk * 52 weeks = 1950 work hours per year
+            gross_annual = df[f'{wage}_rate'] *1950
 
-    # Assume ~37.5 hrs/wk * 52 weeks = 1950 work hours per year
-    gross_annual = gross_rate*1950
+            # Income tax calculated as:
+            income_tax = (gross_annual - df["allowance"])*0.2
 
-    # Income tax calculated as:
-    income_tax = (gross_annual - allowance)*0.2
+            # National insurance has been about £600/yr for low wages for decades
+            nat_ins = 600
 
-    # National insurance is always about £600 /yr
-    nat_ins = 600
+            net_income = gross_annual - income_tax - nat_ins - df["counctax"]
 
-    net_income = gross_annual - income_tax - nat_ins - counc_tax
+        case Wage.STP:
+            net_income = df["stipend"]
 
-    return int(net_income)
+    # Inflation adjust the income to find its real value today (in base year)
+    real_income = net_income * real_mult(2023)
+
+    return real_income
 
 
-def real_value(income: int, income_year: int, base_year: int) -> int:
-    """Inflation adjust income obtained in year to find its real value in base year.
-    
+
+
+def real_mult(base_year: int) -> pd.DataFrame:
+    """Use inflation to calculate real value multipliers for each year relative to a base year.
     
     Parameters
     -------
-    income: int
-        An amount of money earned in a given income year
-
-    income_year: int
-        The income year (2012 -> present)
-        
     base_year: int
         The year to adjust real value to (usually the present year)
 
     Returns
     -------
-    Real value of income relative to base year.
+    pd.DataFrame: real value multiplier of income vs year.
 
     """
-
-    if math.isnan(income):
-        return math.nan # is a float, can be int?
-
-
     
-    # Read in the CPIH values from csv and convert to dictionary
+    # Read in the CPIH values from csv
     input_dir = Path.cwd() / "input"
     cpih_csv = input_dir / "cpih.csv"
+    df = pd.read_csv(cpih_csv,skiprows=1,index_col=0)
 
-    cpih_dict = pd.read_csv(cpih_csv, skiprows=1,index_col=0).squeeze("columns").to_dict()
+    # Get CPIH from base year
+    base_cpih = df["cpih"][df.index==base_year].values[0]
 
-    # CPIH for base / income year = real value multiplier
-    real_mult = cpih_dict.get(base_year) / cpih_dict.get(income_year)
+    # Calculate and return the real value multiplier
+    mult = base_cpih / df["cpih"]
 
-    # Return real value of income
-    return int(income*real_mult)
+    return mult
+
+
