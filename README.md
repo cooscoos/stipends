@@ -8,4 +8,9 @@ References for UK_wage_tax.csv:
 
 [4] [Council tax in England historical](https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax)
 
-[5] [Real living wage (RLW)](https://www.livingwage.org.uk/what-real-living-wage)o
+[5] [Real living wage (RLW)](https://www.livingwage.org.uk/what-real-living-wage)
+
+
+Useful link:
+https://github.com/giswqs/streamlit-geospatial/blob/master/Home.py#L43
+https://geospatial.streamlit.app/
