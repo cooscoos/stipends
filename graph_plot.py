@@ -29,8 +29,6 @@ df["Stipend"] = taxinflate.net_income_df(input_df,Wage.STP)
 df["year"] = df.index
 df = df.melt(id_vars='year',var_name="income_type",value_name="income")
 
-
-
 # Types here: https://altair-viz.github.io/altair-tutorial/notebooks/02-Simple-Charts.html
 c = alt.Chart(df).mark_line(
     point=alt.OverlayMarkDef(filled=False, fill="white")
@@ -43,17 +41,43 @@ c = alt.Chart(df).mark_line(
     color=alt.Color('income_type:N',legend=alt.Legend(title="Income type"))
 )
 
-body = f"""
-Real annual net income from:
+
+st.set_page_config(layout="wide")
+
+
+st.sidebar.title("Info")
+st.sidebar.info(
+    """
+    [WebApp](https://streamlit.todo) | [GitHub](https://github.com/cooscoos/todo) | [Twitter](https://twitter.com/CivilPerry)
+    """
+)
+
+
+st.title("Real annual net income in the UK")
+
+st.info("Click on the left sidebar menu to navigate to the different apps.")
+
+markdown_body = f"""
+This is a time series of the real annual net annual income earned from:
+
 - National Living Wage (NLW);
 - Real Living Wage (RLW), and;
 - UKRI minimum stipend
+
+after income tax, national insurance and typical council tax deductions.
+
+The income assumes the person works 37.5 hr/wk for 52 weeks per year.
 """
 
-st.markdown(body)
+st.markdown(markdown_body)
 
-st.title("Real annual net income")
 st.altair_chart(c,use_container_width=True)
+
+markdown_body = f"""
+Method:
+
+"""
+
 
 # %%
 
