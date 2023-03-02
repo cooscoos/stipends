@@ -37,16 +37,22 @@ c = alt.Chart(df).mark_line(
 ).encode(
     x='year:O',
     y=alt.Y('income:Q',
-        axis=alt.Axis(title="Real annual income (£)"),
+        axis=alt.Axis(title="Real annual net income (£)"),
         scale=alt.Scale(domain=(12000,19000))
     ),
     color=alt.Color('income_type:N',legend=alt.Legend(title="Income type"))
 )
 
+body = f"""
+Real annual net income from:
+- National Living Wage (NLW);
+- Real Living Wage (RLW), and;
+- UKRI minimum stipend
+"""
 
+st.markdown(body)
 
-
-st.title("Real annual net income from National Living Wage (NLW), Real Living Wage (RLW), and UKRI minimum stipend")
+st.title("Real annual net income")
 st.altair_chart(c,use_container_width=True)
 
 # %%
