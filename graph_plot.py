@@ -58,10 +58,10 @@ st.title("Real annual net income in the UK")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
 abstract = f"""
-The graph below shows a time series, over the last decade, of the annual net annual income earned from:
+The graph below shows a time series, over the last decade, of the net annual income from:
 
-- National Living Wage (NLW);
-- Real Living Wage (RLW), and;
+- National Living Wage (NLW) work;
+- Real Living Wage (RLW) work, and;
 - UKRI's minimum stipend;
 
 after typical income tax, national insurance and council tax deductions.

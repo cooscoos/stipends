@@ -42,7 +42,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage) -> pd.DataFrame:
 
     match wage:
         case Wage.NLW | Wage.RLW:
-            # Assume ~37.5 hrs/wk * 52 weeks = 1950 work hours per year
+            # Assume 1950 work hours per year
             gross_annual = df[f'{wage}_rate'] *1950
 
             # Income tax calculated as:
