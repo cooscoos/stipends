@@ -24,6 +24,6 @@ def preamble():
     #st.set_page_config(layout="wide")
     st.sidebar.info(
     """
-    [WebApp](https://streamlit.todo) | [GitHub](https://github.com/cooscoos/todo) | [Twitter](https://twitter.com/CivilPerry)
+    [WebApp](https://cooscoos-stipends-time-series-e8m8oo.streamlit.app/) | [GitHub](https://github.com/cooscoos/stipends) | [Twitter](https://twitter.com/CivilPerry)
     """
     )
