@@ -55,28 +55,29 @@ st.sidebar.info(
 
 st.title("Real annual net income in the UK")
 
-st.info("Click on the left sidebar menu to navigate to the different apps.")
+st.info("Click on the left sidebar menu to navigate to other charts.")
 
-markdown_body = f"""
-This is a time series of the real annual net annual income earned from:
+abstract = f"""
+The graph below shows a time series, over the last decade, of the annual net annual income earned from:
 
 - National Living Wage (NLW);
 - Real Living Wage (RLW), and;
-- UKRI minimum stipend
+- UKRI's minimum stipend;
 
-after income tax, national insurance and typical council tax deductions.
+after typical income tax, national insurance and council tax deductions.
 
-The income assumes the person works 37.5 hr/wk for 52 weeks per year.
+All incomes are inflation-adjusted to reflect their real value relative to the current year.
+
 """
 
-st.markdown(markdown_body)
+st.markdown(abstract)
 
 st.altair_chart(c,use_container_width=True)
 
-markdown_body = f"""
-Method:
-
-"""
+f = open("method1.md", "r")
+lines = f.readlines()
+for line in lines:
+    st.markdown(line)
 
 
 # %%
