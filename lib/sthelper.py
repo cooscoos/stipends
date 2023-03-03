@@ -17,3 +17,12 @@ def write_md(md_file: Path):
     for line in lines:
         st.markdown(line)
     f.close()
+
+def preamble():
+    """Preamble and set up for every streamlit page incl set up sidebar."""
+    st.set_page_config(layout="wide")
+    st.sidebar.info(
+    """
+    [WebApp](https://streamlit.todo) | [GitHub](https://github.com/cooscoos/todo) | [Twitter](https://twitter.com/CivilPerry)
+    """
+    )

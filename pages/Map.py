@@ -10,13 +10,7 @@ INPUT_DIR = Path.cwd() / "input"    # location of input data
 MD_DIR = Path.cwd() / "markdown"    # location of markdown
 
 # General webpage set up
-st.set_page_config(layout="wide")
-st.sidebar.title("Info")
-st.sidebar.info(
-    """
-    [WebApp](https://streamlit.todo) | [GitHub](https://github.com/cooscoos/todo) | [Twitter](https://twitter.com/CivilPerry)
-    """
-)
+sthelper.preamble()
 
 # Content of page
 st.title("To do, a map")
