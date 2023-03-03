@@ -1,3 +1,4 @@
+To do:
+- cache data
+- [make pretty](https://streamlit.io/gallery)
 
-Useful link:
-https://github.com/giswqs/streamlit-geospatial/blob/master/Home.py#L43
