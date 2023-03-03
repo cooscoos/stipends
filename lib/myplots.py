@@ -36,7 +36,7 @@ def time_series(file: Path) -> alt.Chart:
 
     # Define a time-series chart
     # Info on type notation: https://altair-viz.github.io/altair-tutorial/notebooks/02-Simple-Charts.html
-    c = alt.Chart(df).mark_line(
+    c = alt.Chart(df,height=500).mark_line(
         point=alt.OverlayMarkDef(filled=False, fill="white")
     ).encode(
         x='year:O',
