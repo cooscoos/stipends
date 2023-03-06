@@ -4,18 +4,11 @@ import streamlit as st
 import pandas as pd
 import requests
 
-import sys
-sys.path.insert(0, '..')
-
 from lib import sthelper
 from lib import myplots
-
 from lib import curr_conv
 
-
-# Constants - to do define elsewhere higher up and have pages do rendering only with caches
-INPUT_DIR = Path.cwd() / ".."/ "input"    # location of input data
-MD_DIR = Path.cwd() / ".."/ "markdown"    # location of markdown
+import constants
 
 # General webpage set up
 sthelper.preamble()
@@ -26,7 +19,7 @@ st.info("Click on the left sidebar menu to navigate to other charts.")
 
 
 # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
-input_df = pd.read_csv(INPUT_DIR / "europe.csv", header=1, index_col=0)
+input_df = pd.read_csv(constants.INPUT_DIR / "europe.csv", header=1, index_col=0)
 
 # Get exchange rates, todo cache and get once per day
 response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
