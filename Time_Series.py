@@ -1,5 +1,4 @@
 #%%
-from pathlib import Path
 import streamlit as st
 
 from pages.lib import myplots

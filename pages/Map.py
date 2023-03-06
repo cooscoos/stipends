@@ -4,6 +4,8 @@ import streamlit as st
 import pandas as pd
 import requests
 
+import plotly.express as px
+
 from pages.lib import sthelper
 from pages.lib import myplots
 from pages.lib import curr_conv
@@ -37,9 +39,27 @@ df = curr_conv.net_income_euros(input_df,rates)
 # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
 ppp_df = pd.read_csv(constants.INPUT_DIR / "SNA_TABLE4_06032023125841319.csv", header=0, index_col=1)
 
+df["country_code"] = ppp_df["LOCATION"]
+df.dropna(inplace=True)
 
 # now convert to gbp
 final = curr_conv.gbp_worth(df, ppp_df, rates)
+final["country_code"] = ppp_df["LOCATION"]
+
+
+stipend_map = px.choropleth(
+    df,
+    locations="country_code",
+    featureidkey="properties.ADMIN",
+    color="net_euro",
+)
+
+stipend_map.update_geos(fitbounds="locations", visible=True)
+
+st.plotly_chart(stipend_map)
+
+
+
 
 
 # sthelper.write_md(MD_DIR / "ts_abstract.md")
