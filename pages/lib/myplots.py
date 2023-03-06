@@ -3,9 +3,9 @@
 
 import pandas as pd
 import altair as alt
-from lib import taxinflate
+import pages.lib.taxinflate as taxinflate
 from pathlib import Path
-from lib.taxinflate import Wage
+from pages.lib.taxinflate import Wage
 
 
 def time_series(file: Path) -> alt.Chart:

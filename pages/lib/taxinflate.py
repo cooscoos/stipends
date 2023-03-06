@@ -2,7 +2,8 @@
 
 from pathlib import Path
 import pandas as pd
-import math
+import pages.lib.constants as constants
+
 
 from enum import Enum
 class Wage(str,Enum):
@@ -79,8 +80,7 @@ def real_mult(base_year: int) -> pd.DataFrame:
     """
     
     # Read in the CPIH values from csv
-    input_dir = Path.cwd() / "input"
-    cpih_csv = input_dir / "cpih.csv"
+    cpih_csv = constants.INPUT_DIR / "cpih.csv"
     df = pd.read_csv(cpih_csv,skiprows=1,index_col=0)
 
     # Get CPIH from base year

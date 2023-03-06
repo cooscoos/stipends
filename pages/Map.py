@@ -4,11 +4,11 @@ import streamlit as st
 import pandas as pd
 import requests
 
-from lib import sthelper
-from lib import myplots
-from lib import curr_conv
+from pages.lib import sthelper
+from pages.lib import myplots
+from pages.lib import curr_conv
+from pages.lib import constants
 
-import constants
 
 # General webpage set up
 sthelper.preamble()
@@ -36,7 +36,7 @@ df = curr_conv.net_income_euros(input_df,rates)
 
 # Just use a csv snapshot of this data instead.
 # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
-ppp_df = pd.read_csv(INPUT_DIR / "SNA_TABLE4_06032023125841319.csv", header=0, index_col=1)
+ppp_df = pd.read_csv(constants.INPUT_DIR / "SNA_TABLE4_06032023125841319.csv", header=0, index_col=1)
 
 
 # now convert to gbp

@@ -2,10 +2,9 @@
 from pathlib import Path
 import streamlit as st
 
-from pages.lib import sthelper
 from pages.lib import myplots
-
-import constants
+from pages.lib import sthelper
+import pages.lib.constants as constants
 
 # General webpage set up
 sthelper.preamble()
