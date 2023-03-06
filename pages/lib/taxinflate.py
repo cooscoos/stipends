@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import pandas as pd
-import pages.lib.constants as constants
+from pages.lib import constants
 
 
 from enum import Enum

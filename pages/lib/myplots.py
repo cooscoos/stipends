@@ -3,7 +3,7 @@
 
 import pandas as pd
 import altair as alt
-import pages.lib.taxinflate as taxinflate
+from pages.lib import taxinflate
 from pathlib import Path
 from pages.lib.taxinflate import Wage
 
@@ -47,3 +47,5 @@ def time_series(file: Path) -> alt.Chart:
         color=alt.Color('income_type:N',legend=alt.Legend(title="Income type"))
     )
     return c
+
+

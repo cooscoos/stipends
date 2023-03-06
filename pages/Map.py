@@ -17,7 +17,6 @@ sthelper.preamble()
 st.title("To do, a map")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
-
 # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
 input_df = pd.read_csv(constants.INPUT_DIR / "europe.csv", header=1, index_col=0)
 

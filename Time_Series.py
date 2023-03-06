@@ -4,7 +4,7 @@ import streamlit as st
 
 from pages.lib import myplots
 from pages.lib import sthelper
-import pages.lib.constants as constants
+from pages.lib import constants
 
 # General webpage set up
 sthelper.preamble()

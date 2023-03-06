@@ -1,3 +1,5 @@
+"""Module for handling currency and value conversions between European countries."""
+
 import pandas as pd
 
 def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
