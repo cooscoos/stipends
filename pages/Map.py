@@ -33,9 +33,24 @@ map1 = myplots.maps(df,"gbp","Equivalent income £/yr")
 map2 = myplots.maps(df,"net_euro","Absolute income €/yr")
 
 
-tab1, tab2, tab3 = st.tabs(["Data", "Equivalent income (£/yr)", "Absolute income (€/yr)"])
+tab1, tab2, tab3, tab4 = st.tabs(["Chart equivalent income (£/yr)", "Map equivalent income (£/yr)", "Map absolute income (€/yr)", "Data"])
 
-tab1.write(df)
+import altair as alt
+with tab1:
+
+    c = alt.Chart(df,width=800,height=450).mark_bar().encode(
+        x=alt.X('country_name:O',
+                axis = alt.Axis(title=None)
+        ),
+        y=alt.Y('gbp:Q',
+            axis=alt.Axis(title="Equivalent income (£/yr)"),
+            #scale=alt.Scale(domain=(0,25000))
+        ),
+        color=alt.Color('gbp:Q',legend=alt.Legend(title="£/yr"))
+    ).interactive()
+
+
+    st.altair_chart(c)
 
 with tab2:
     st.markdown("#### Equivalent annual income in £ (with purchasing power correction)")
@@ -45,6 +60,9 @@ with tab2:
 with tab3:
     st.markdown("#### Actual annual income in € (no purchasing power correction)")
     folium_static(map2,width=800,height=800)
+
+tab4.write(df)
+
 
 
 
