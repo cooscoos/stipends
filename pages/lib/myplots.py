@@ -6,6 +6,12 @@ import altair as alt
 from pages.lib import taxinflate
 from pathlib import Path
 from pages.lib.taxinflate import Wage
+from pages.lib import euro_conv
+
+
+import folium
+
+from pages.lib import constants
 
 
 def time_series(file: Path) -> alt.Chart:
@@ -49,3 +55,43 @@ def time_series(file: Path) -> alt.Chart:
     return c
 
 
+
+
+def maps(file: Path, column_name: str, legend_name: str) -> folium.Map:
+    """Returns chloropleths of Europe with stipend values.
+     
+    Parameters
+    -------
+    file: Path
+        UK wage and tax data.
+
+    Returns
+    -------
+    alt.Chart time-series.
+
+    """
+
+
+    df = euro_conv.get_euro(file)
+    
+    json1 = constants.INPUT_DIR / "custom.geojson"
+
+    tiletype = 'CartoDB positron'
+
+    map1 = folium.Map(location=[55,18], tiles=tiletype, zoom_control=False,
+                zoom_start=4, min_zoom=4,max_zoom=4)
+
+    folium.Choropleth(
+        geo_data=json1.as_posix(),
+        name="chloropleth",
+        data=df,
+        columns=["country_code",column_name],
+        key_on="feature.properties.adm0_iso",
+        fill_color="YlOrRd",
+        fill_opacity=0.8,
+        line_opacity=0.1,
+        legend_name=legend_name
+    ).add_to(map1)
+
+
+    return map1
