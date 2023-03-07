@@ -2,6 +2,47 @@
 
 import pandas as pd
 
+import pandas as pd
+import requests
+from pathlib import Path
+from pages.lib import curr_conv
+
+from pages.lib import constants
+
+
+def get_euro(file: Path) -> pd.DataFrame:
+
+    # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
+    input_df = pd.read_csv(file, header=1, index_col=0)
+
+    # Get exchange rates, todo cache and get once per day
+    response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
+    rates = response.get('rates')
+
+    # Find net annual stipend for all countries in euros
+    df = net_income_euros(input_df,rates)
+
+
+    # We could use API to get PPP values, but the connection to oecd doesn't support up-to-date encryption, and isn't updated very often.
+    #oecd_base =  "https://stats.oecd.org/SDMX-JSON/data/"
+    #requester = "SNA_TABLE4/AUT+BEL+DNK+FIN+FRA+DEU+IRL+ITA+NLD+NOR+POL+PRT+ESP+SWE+CHE+GBR+USA.PPPGDP.CD/all?startTime=2021&endTime=2022&dimensionAtObservation=allDimensions"
+    #response = requests.get(oecd_base + requester)
+
+    # Just use a csv snapshot of this data instead.
+    # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
+    ppp_df = pd.read_csv(constants.INPUT_DIR / "SNA_TABLE4_06032023125841319.csv", header=0, index_col=1)
+
+    df["country_code"] = ppp_df["LOCATION"]
+    #df.dropna(inplace=True)
+
+    # now convert to gbp
+    df = gbp_worth(df, ppp_df, rates)
+    #final["country_code"] = ppp_df["LOCATION"]
+
+   
+    return df
+
+
 def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
     """Returns the net annual income (in Euros) for a PhD student after taxes
      
@@ -25,11 +66,9 @@ def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
     conversion = df['curr'].apply(lambda row: rates.get(row))
 
     # Return net income in euros
-    new_df = pd.DataFrame()
-    new_df.index = df.index
-    new_df['net_euro'] = net_local/conversion
+    df['net_euro'] = net_local/conversion
 
-    return new_df
+    return df
 
 
 
@@ -55,19 +94,18 @@ def gbp_worth(df: pd.DataFrame, ppp_df: pd.DataFrame, rates: dict) -> pd.DataFra
     
     # PPP values are given in local currency per USD. Convert to euros per USD.
     ppp_df["Unit mult"] = ppp_df['Unit Code'].apply(lambda row: rates.get(row))
-    ppp_df["ppp"] = ppp_df["Value"] / ppp_df["Unit mult"]
+    df["ppp"] = ppp_df["Value"] / ppp_df["Unit mult"]
 
     # The only thing we now care about is this ppp value
-    ppp = ppp_df['ppp']
+
 
     # Divide ppp values by the UK's to find a multiplier
-    base_ppp = ppp[ppp.index=="United Kingdom"].values[0]
-    correction = ppp/base_ppp
+    base_ppp = df["ppp"][df.index=="United Kingdom"].values[0]
+    df["correction"] = base_ppp/df["ppp"]
 
-    merged_df = df.merge(correction,left_index=True, right_index=True)
+    df["corrected_euros"] = df["net_euro"] * df["correction"]
 
-    # Calculate the corrected £ value
-    final = pd.DataFrame()
-    final["gbp"] = (merged_df["net_euro"] / merged_df["ppp"]) * rates.get("GBP")
+    df["gbp"] =  df["corrected_euros"] * rates.get("GBP")
 
-    return final
+
+    return df

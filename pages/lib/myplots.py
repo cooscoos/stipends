@@ -6,10 +6,10 @@ import altair as alt
 from pages.lib import taxinflate
 from pathlib import Path
 from pages.lib.taxinflate import Wage
-from pages.lib import euro_conv
-
 
 import folium
+from folium.features import GeoJsonTooltip
+import geopandas as gpd
 
 from pages.lib import constants
 
@@ -57,7 +57,7 @@ def time_series(file: Path) -> alt.Chart:
 
 
 
-def maps(file: Path, column_name: str, legend_name: str) -> folium.Map:
+def maps(df: pd.DataFrame, column_name: str, legend_name: str) -> folium.Map:
     """Returns chloropleths of Europe with stipend values.
      
     Parameters
@@ -71,27 +71,58 @@ def maps(file: Path, column_name: str, legend_name: str) -> folium.Map:
 
     """
 
-
-    df = euro_conv.get_euro(file)
-    
     json1 = constants.INPUT_DIR / "custom.geojson"
 
-    tiletype = 'CartoDB positron'
+    geojson = gpd.read_file(json1)
 
-    map1 = folium.Map(location=[55,18], tiles=tiletype, zoom_control=False,
+    # These steps are optional but it makes it easier to view geojson data alongside df
+    geojson = geojson[['adm0_iso','geometry']]
+    geojson.set_index("adm0_iso",inplace=True)
+    df_final = geojson.merge(df, left_index=True,right_index=True)
+    df_final = df_final[~df_final['geometry'].isna()]
+
+ 
+    map1 = folium.Map(location=[55,18], tiles="CartoDB positron", zoom_control=False,
                 zoom_start=4, min_zoom=4,max_zoom=4)
+    
+    map1
+    #custom_scale = (df[column_name].quantile((0,0.2,0.4,0.6,0.8,0.9,1))).tolist()
 
     folium.Choropleth(
         geo_data=json1.as_posix(),
         name="chloropleth",
-        data=df,
-        columns=["country_code",column_name],
+        data=df_final,
+        columns=[df_final.index,column_name],
         key_on="feature.properties.adm0_iso",
         fill_color="YlOrRd",
-        fill_opacity=0.8,
-        line_opacity=0.1,
+        #threshold_scale=custom_scale,
+        nan_fill_color="White",
+        highlight=True,
+        fill_opacity=0.7,
+        line_opacity=1,
+        overlay=False,
         legend_name=legend_name
     ).add_to(map1)
 
+    folium.features.GeoJson(
+        data=df_final,
+        name=legend_name,
+        smooth_factor=2,
+        style_function=lambda x: {'color':'black','fillColor':'transparent','weight':0.5},
+        tooltip=GeoJsonTooltip(
+            fields=["country_name", column_name],
+            aliases=["Country", legend_name], 
+            localize=True,
+            sticky=False,
+            labels=True,
+            style="""
+                background-color: #F0EFEF;
+                border: 2px solid black;
+                border-radius: 3px;
+                box-shadow: 3px;
+            """,
+            max_width=800,),
+                highlight_function=lambda x: {'weight':3,'fillColor':'grey'},
+            ).add_to(map1)
 
     return map1
