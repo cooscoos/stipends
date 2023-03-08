@@ -1,4 +1,5 @@
 To do:
+- fix broken online app... modules?
 - tidy code
 - integers for cash values
 - look at caching
