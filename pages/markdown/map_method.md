@@ -25,6 +25,10 @@ $$ CoL = {PPP(UK) [€/ \$ ] \over PPP(country) [€/ \$ ]} $$.
 
 PhD incomes can vary widely even within countries. In this analysis, we have tried to find typical values for PhD income,for example the stipend or salary levels recommended by each country's national PhD funding bodies.
 
+Tax on salaries are calculated using online tools like [[TAX1]](https://www.icalculator.info) or [[TAX2]](https://investomatica.com/income-tax-calculator).
+
+Assumptions are always onerous: we'll choose salaries at the lower end of the spectrum, and will assume scholarships don't cover international fee rates (even if they usually do).
+
 Countries below which are denoted "None" mean that:
 
 - no information on typical income could be found;
@@ -44,19 +48,43 @@ Here, we onerously assume a gross income €32,000/yr is taxed, and then subject
 
 ##### Belgium
 
+Searches at the time of writing revealed PhDs with gross taxable annual stipends of around €32,000/yr [[BEL2]](https://www.findaphd.com/phds/belgium/). Belgium's tax rates are higher than Austria's, so this results in a lower net income.
+
+Fees can be up to €980/yr [[BEL1]](https://www.findaphd.com/guides/phd-study-in-belgium) depending on the institution.
+
+
 ##### Denmark
+
+Salaries for PhD students from the DTU are gross 51600&nbsp;krone/yr[[DNK1]](https://www.dtu.dk/english/education/phd/intro/salary).
+
+Fees for international students vary but are typically around 6700&nbsp;krone/yr.
 
 ##### Finland
 
+Info on full scholarships for PhD students could not be found. Finland do not charge fees [[FIN1]](https://www.findaphd.com/guides/phd-study-in-finland).
+
 ##### France
 
+CIFRE suggest an annual minimum salary of €23,484/yr [[FRA1]](https://www.enseignementsup-recherche.gouv.fr/fr/le-financement-doctoral-46472). Fees for UK students are €380/yr [[FRA2]](https://www.findaphd.com/guides/phd-study-in-france).
+
+
 ##### Germany
+
+Germany Universities and institutions typically offer salaries at 65% of TVöD 13, which is around €32,000/yr at the time of writing (Spring 2023) [[DEU1]](https://www.chemistryworld.com/news/wage-rise-for-max-planck-phd-candidates-approved/4013241.article). There are sometimes fees of up to €700/yr [[DEU2]](https://www.findaphd.com/blog/8810/is-postgraduate-study-in-germany-really-free).
+
+Germany's tax system is quite complicated, but here we assume the €32,000/yr salary is taxed at category I in Berlin. This results in taxes and social securities of around €9,600/yr.
 
 ##### Italy (None)
 
 ##### Ireland
 
+Searches on findPhD revealed Irish stipends are typically €18,000/yr--19,500/yr. It is unclear, but we believe that fees on scholarships are usually covered for UK students.
+
 ##### Netherlands
+
+Searches on findPhD revealed gross annual salaries of €29,000/yr -- €41,000/yr, and here we will take the lower end as a value.
+
+There are typically no fees for students in the Netherlands [[NLD1]](https://www.findaphd.com/guides/phd-study-in-netherlands)
 
 ##### Norway (None)
 
@@ -65,6 +93,8 @@ Here, we onerously assume a gross income €32,000/yr is taxed, and then subject
 ##### Spain (None)
 
 ##### Sweden
+
+Salaries of around 348,000 kr/yr are typical [[SWE1]](https://staff.ki.se/employment-as-a-doctoral-student-at-ki), and there are no fees.
 
 ##### Switzerland
 

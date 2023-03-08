@@ -1,17 +1,17 @@
 ﻿Country,Annual stipend (euros),Typical tax deduction (euros),Annual fees for UK student,Purchasing power parity (euros/usd),Currency
 country,stip,tax,fee,curr
-Austria,32000,3910,1496,EUR
-Belgium,29532,7662,980,EUR
+Austria,32000,3860,1496,EUR
+Belgium,32000,13975,980,EUR
 Denmark,384000,125520,50000,DKK
-Finland,33624,9826,0,EUR
+Finland,,,0,EUR
 France,23484,5670,380,EUR
-Germany,32088,9894,450,EUR
-Ireland,18500,0,0,EUR
+Germany,32088,9600,700,EUR
+Ireland,18000,0,0,EUR
 Italy,,,,EUR
 Netherlands,29208,3326,0,EUR
 Norway,,,0,EUR
 Portugal,,,,EUR
 Spain,,,,EUR
-Sweden,360000,102491,0,SEK
+Sweden,348000,110274,0,SEK
 Switzerland,49754,9644,0,CHF
 United Kingdom,17668,0,0,GBP
