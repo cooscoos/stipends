@@ -103,11 +103,11 @@ def gbp_worth(df: pd.DataFrame, ppp_df: pd.DataFrame, rates: dict) -> pd.DataFra
 
     # Divide ppp values by the UK's to find a multiplier
     base_ppp = df["ppp"][df.index=="United Kingdom"].values[0]
-    df["correction"] = base_ppp/df["ppp"]
+    df["col_correction"] = base_ppp/df["ppp"]
 
-    df["corrected_euros"] = df["net_euro"] * df["correction"]
+    df["corrected_euros"] = df["net_euro"] * df["col_correction"]
 
-    df["gbp"] =  df["corrected_euros"] * rates.get("GBP")
+    df["corrected_gbp"] =  df["corrected_euros"] * rates.get("GBP")
 
 
     return df

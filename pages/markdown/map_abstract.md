@@ -1,5 +1,6 @@
-The tabs below show the annual income from typical PhD stipends around Europe with and without a cost of living (CoL) correction:
+The tabs below show charts and maps of the annual income from typical PhD stipends around Western and Northern Europe with and without a cost of living (CoL) correction.
 
-- *Chart equivalent income (£/yr)*: Bar chart of annual income in £ (with CoL correction);
-- *Map equivalent income (£/yr)*: Heat map of annual income in £ (with CoL correction);
-- *Map absolute income (€/yr)*: Heat map of annual income in € (no CoL correction).
+In some countries, PhD students are salaried employees. For these countries:
+
+- typical income taxes are deducted, but;
+- the benefits of contributing to a state pension are ignored.
