@@ -30,7 +30,9 @@ def get_euro(file: Path) -> pd.DataFrame:
 
     # Just use a csv snapshot of this data instead.
     # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
-    ppp_df = pd.read_csv(constants.INPUT_DIR / "SNA_TABLE4_06032023125841319.csv", header=0, index_col=1)
+    #filename = "SNA_TABLE4_06032023125841319.csv"
+    filename = "SNA_TABLE4_08032023100526351.csv"
+    ppp_df = pd.read_csv(constants.INPUT_DIR / filename, header=0, index_col=1)
 
     df["country_code"] = ppp_df["LOCATION"]
     #df.dropna(inplace=True)

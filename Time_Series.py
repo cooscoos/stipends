@@ -9,7 +9,7 @@ from pages.lib import constants
 sthelper.preamble()
 
 # Content of page
-st.title("PhD stipend income in the UK")
+st.title("UK PhD stipends over time")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
 sthelper.write_md(constants.MD_DIR / "ts_abstract.md")

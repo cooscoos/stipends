@@ -21,6 +21,8 @@ sthelper.preamble()
 st.title("PhD stipends around Europe")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
+sthelper.write_md(constants.MD_DIR / "map_abstract.md")
+
 file = constants.INPUT_DIR / "europe.csv"
 
 df = curr_conv.get_euro(file)
@@ -32,12 +34,11 @@ df.set_index("country_code",inplace=True)
 map1 = myplots.maps(df,"gbp","Equivalent income £/yr")
 map2 = myplots.maps(df,"net_euro","Absolute income €/yr")
 
-
 tab1, tab2, tab3, tab4 = st.tabs(["Chart equivalent income (£/yr)", "Map equivalent income (£/yr)", "Map absolute income (€/yr)", "Data"])
 
 import altair as alt
 with tab1:
-
+    st.markdown("#### Equivalent annual income in £ (with purchasing power correction)")
     c = alt.Chart(df,width=800,height=450).mark_bar().encode(
         x=alt.X('country_name:O',
                 axis = alt.Axis(title=None)
@@ -65,5 +66,6 @@ tab4.write(df)
 
 
 
+sthelper.write_md(constants.MD_DIR / "map_method.md")
 
 
