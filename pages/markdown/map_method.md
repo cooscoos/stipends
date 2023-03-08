@@ -78,11 +78,11 @@ Germany's tax system is quite complicated, but here we assume the €32,000/yr s
 
 ##### Ireland
 
-Searches on findPhD revealed Irish stipends are typically €18,000/yr--19,500/yr. It is unclear, but we believe that fees on scholarships are usually covered for UK students.
+Searches on findPhD revealed Irish stipends are typically €18,000/yr&mdash;19,500/yr. It is unclear, but we believe that fees on scholarships are usually covered for UK students.
 
 ##### Netherlands
 
-Searches on findPhD revealed gross annual salaries of €29,000/yr -- €41,000/yr, and here we will take the lower end as a value.
+Searches on findPhD revealed gross annual salaries of €29,000/yr &mdash; €41,000/yr, and here we will take the lower end as a value.
 
 There are typically no fees for students in the Netherlands [[NLD1]](https://www.findaphd.com/guides/phd-study-in-netherlands)
 
@@ -94,9 +94,11 @@ There are typically no fees for students in the Netherlands [[NLD1]](https://www
 
 ##### Sweden
 
-Salaries of around 348,000 kr/yr are typical [[SWE1]](https://staff.ki.se/employment-as-a-doctoral-student-at-ki), and there are no fees.
+Salaries of around 348,000 kr/yr are typical [[SWE1]](https://staff.ki.se/employment-as-a-doctoral-student-at-ki), and there are no fees [[SWE2]](https://www.findaphd.com/guides/phd-study-in-sweden).
 
 ##### Switzerland
+
+Searches on findPhD revealed salaries of 50,000&mdash; 55,000 CHF/yr and there are no fees if a UK student finds a paid PhD position [[CHE1]](https://www.findaphd.com/guides/phd-funding-switzerland).
 
 ##### United Kingdom
 
