@@ -23,7 +23,7 @@ INPUT_DIR = Path.cwd()  / "input"    # location of input data
 MD_DIR = Path.cwd() / "markdown"     # location of markdown
 
 # General webpage set up
-#sthelper.preamble()
+sthelper.preamble()
 
 # Content of page
 st.title("PhD stipends around Europe")

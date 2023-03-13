@@ -20,7 +20,7 @@ def write_md(md_file: Path):
 
 def preamble():
     """Preamble and set up for every streamlit page incl set up sidebar."""
-    st.set_page_config(page_title="UKRI Stipends", page_icon=":eyeglasses:")
+
     #st.set_page_config(layout="wide")
     st.sidebar.info(
     """
