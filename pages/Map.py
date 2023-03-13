@@ -17,29 +17,30 @@ from lib import curr_conv
 from pathlib import Path
 #%%
 
-# Define constants
-INPUT_DIR = Path.cwd()  / ".." / "input"    # location of input data
-MD_DIR = Path.cwd() / ".." / "markdown"     # location of markdown
+# Define constant paths relative to this file
+
+INPUT_DIR = Path.cwd()  / "input"    # location of input data
+MD_DIR = Path.cwd() / "markdown"     # location of markdown
 
 # General webpage set up
-sthelper.preamble()
+#sthelper.preamble()
 
 # Content of page
 st.title("PhD stipends around Europe")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
-sthelper.write_md(constants.MD_DIR / "map_abstract.md")
+sthelper.write_md(MD_DIR / "map_abstract.md")
 
-file = INPUT_DIR / "europe.csv"
 
-df = curr_conv.get_euro(file)
+
+df = curr_conv.get_euro(INPUT_DIR)
 
 # todo, this earlier
 df["country_name"] = df.index
 df.set_index("country_code",inplace=True)
 
-map1 = myplots.maps(df,"corrected_gbp","Equivalent income £/yr")
-map2 = myplots.maps(df,"net_euro","Absolute income €/yr")
+map1 = myplots.maps(df,"corrected_gbp","Equivalent income £/yr", INPUT_DIR)
+map2 = myplots.maps(df,"net_euro","Absolute income €/yr", INPUT_DIR)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Chart equivalent income (£/yr)", "Map equivalent income (£/yr)", "Map absolute income (€/yr)", "Data"])
 

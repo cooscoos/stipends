@@ -10,10 +10,10 @@ from lib import curr_conv
 
 
 
-def get_euro(file: Path) -> pd.DataFrame:
+def get_euro(input_path: Path) -> pd.DataFrame:
 
     # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
-    input_df = pd.read_csv(file, header=1, index_col=0)
+    input_df = pd.read_csv(input_path / "europe.csv", header=1, index_col=0)
 
     # Get exchange rates, todo cache and get once per day
     response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
@@ -32,8 +32,8 @@ def get_euro(file: Path) -> pd.DataFrame:
     # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
     #filename = "SNA_TABLE4_06032023125841319.csv"
     filename = "SNA_TABLE4_08032023100526351.csv"
-    INPUT_DIR = Path.cwd() / ".." / "input"
-    ppp_df = pd.read_csv(INPUT_DIR / filename, header=0, index_col=1)
+    
+    ppp_df = pd.read_csv(input_path / filename, header=0, index_col=1)
 
     df["country_code"] = ppp_df["LOCATION"]
     #df.dropna(inplace=True)

@@ -60,12 +60,12 @@ def time_series(input_path: Path) -> alt.Chart:
 
 
 
-def maps(df: pd.DataFrame, column_name: str, legend_name: str) -> folium.Map:
+def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path) -> folium.Map:
     """Returns chloropleths of Europe with stipend values.
      
     Parameters
     -------
-    file: Path
+    input_path: Path
         UK wage and tax data.
 
     Returns
@@ -74,9 +74,9 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str) -> folium.Map:
 
     """
 
-    INPUT_DIR = Path.cwd() / ".." / "input"
 
-    json1 = INPUT_DIR / "custom.geojson"
+
+    json1 = input_path / "custom.geojson"
 
     geojson = gpd.read_file(json1)
 
