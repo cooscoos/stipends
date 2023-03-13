@@ -3,24 +3,23 @@
 
 import pandas as pd
 import altair as alt
-from pages.lib import taxinflate
+from lib import taxinflate
 from pathlib import Path
-from pages.lib.taxinflate import Wage
+from lib.taxinflate import Wage
 
 import folium
 from folium.features import GeoJsonTooltip
 import geopandas as gpd
 
-from pages.lib import constants
 
 
-def time_series(file: Path) -> alt.Chart:
+def time_series(input_path: Path) -> alt.Chart:
     """Returns an altair chart: a time-series of real income from PhD stipends and salaried work.
      
     Parameters
     -------
-    file: Path
-        UK wage and tax data.
+    input_path: Path
+        Path to data input directory
 
     Returns
     -------
@@ -29,12 +28,16 @@ def time_series(file: Path) -> alt.Chart:
     """
 
     # Read in UK wages and tax data and calculate inflation-adjusted net annual incomes
-    input_df = pd.read_csv(file, header=1, index_col=0)
+
+    wage_file = input_path / "UK_wage_tax.csv"
+    
+
+    input_df = pd.read_csv(wage_file, header=1, index_col=0)
 
     df = pd.DataFrame()
-    df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW)
-    df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW)
-    df["Stipend"] = taxinflate.net_income_df(input_df,Wage.STP)
+    df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW, input_path)
+    df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW, input_path)
+    df["Stipend"] = taxinflate.net_income_df(input_df,Wage.STP, input_path)
 
     # Convert wide-form dataframe to the long-form preferred by altair
     df["year"] = df.index
@@ -71,7 +74,9 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str) -> folium.Map:
 
     """
 
-    json1 = constants.INPUT_DIR / "custom.geojson"
+    INPUT_DIR = Path.cwd() / ".." / "input"
+
+    json1 = INPUT_DIR / "custom.geojson"
 
     geojson = gpd.read_file(json1)
 

@@ -5,9 +5,9 @@ import pandas as pd
 import pandas as pd
 import requests
 from pathlib import Path
-from pages.lib import curr_conv
+from lib import curr_conv
 
-from pages.lib import constants
+
 
 
 def get_euro(file: Path) -> pd.DataFrame:
@@ -32,7 +32,8 @@ def get_euro(file: Path) -> pd.DataFrame:
     # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
     #filename = "SNA_TABLE4_06032023125841319.csv"
     filename = "SNA_TABLE4_08032023100526351.csv"
-    ppp_df = pd.read_csv(constants.INPUT_DIR / filename, header=0, index_col=1)
+    INPUT_DIR = Path.cwd() / ".." / "input"
+    ppp_df = pd.read_csv(INPUT_DIR / filename, header=0, index_col=1)
 
     df["country_code"] = ppp_df["LOCATION"]
     #df.dropna(inplace=True)

@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import pandas as pd
-from pages.lib import constants
+
 
 
 from enum import Enum
@@ -18,7 +18,7 @@ class Wage(str,Enum):
     STP = "stipend"
 
 
-def net_income_df(df: pd.DataFrame, wage: Wage) -> pd.DataFrame:
+def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFrame:
     """Returns the net annual income after income tax, national insurance, and typical council tax payments,
     assuming that all income tax is paid at the lowest rate (20%). Valid for years 2012 and beyond.
     
@@ -34,6 +34,9 @@ def net_income_df(df: pd.DataFrame, wage: Wage) -> pd.DataFrame:
     base_year: int
         The year to adjust real value to (usually the present year)
 
+    input_path: Path
+        Path to input data
+
 
     Returns
     -------
@@ -41,6 +44,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage) -> pd.DataFrame:
 
     """
 
+    
     match wage:
         case Wage.NLW | Wage.RLW:
             # Assume 1950 work hours per year
@@ -58,14 +62,14 @@ def net_income_df(df: pd.DataFrame, wage: Wage) -> pd.DataFrame:
             net_income = df["stipend"]
 
     # Inflation adjust the income to find its real value today (in base year)
-    real_income = net_income * real_mult(2023)
+    real_income = net_income * real_mult(2023, input_path)
 
     return real_income
 
 
 
 
-def real_mult(base_year: int) -> pd.DataFrame:
+def real_mult(base_year: int, input_path: Path) -> pd.DataFrame:
     """Use inflation to calculate real value multipliers for each year relative to a base year.
     
     Parameters
@@ -73,15 +77,17 @@ def real_mult(base_year: int) -> pd.DataFrame:
     base_year: int
         The year to adjust real value to (usually the present year)
 
+    input_path: Path
+        Path to data
+
     Returns
     -------
     pd.DataFrame: real value multiplier of income vs year.
 
     """
-    
-    # Read in the CPIH values from csv
-    cpih_csv = constants.INPUT_DIR / "cpih.csv"
-    df = pd.read_csv(cpih_csv,skiprows=1,index_col=0)
+
+    file = input_path / "cpih.csv"
+    df = pd.read_csv(file,skiprows=1,index_col=0)
 
     # Get CPIH from base year
     base_cpih = df["cpih"][df.index==base_year].values[0]

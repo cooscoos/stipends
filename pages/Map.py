@@ -3,16 +3,23 @@
 import streamlit as st
 
 from streamlit_folium import folium_static
-from pages.lib import myplots
+import sys  
+sys.path.append('../..')
+
+from lib import myplots
 
 #import plotly.express as px
 
-from pages.lib import sthelper
-from pages.lib import constants
-from pages.lib import curr_conv
+from lib import sthelper
 
+from lib import curr_conv
 
+from pathlib import Path
 #%%
+
+# Define constants
+INPUT_DIR = Path.cwd()  / ".." / "input"    # location of input data
+MD_DIR = Path.cwd() / ".." / "markdown"     # location of markdown
 
 # General webpage set up
 sthelper.preamble()
@@ -23,7 +30,7 @@ st.info("Click on the left sidebar menu to navigate to other charts.")
 
 sthelper.write_md(constants.MD_DIR / "map_abstract.md")
 
-file = constants.INPUT_DIR / "europe.csv"
+file = INPUT_DIR / "europe.csv"
 
 df = curr_conv.get_euro(file)
 
@@ -70,6 +77,6 @@ tab4.write(df)
 
 
 
-sthelper.write_md(constants.MD_DIR / "map_method.md")
+sthelper.write_md(MD_DIR / "map_method.md")
 
 
