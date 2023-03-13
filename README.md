@@ -1,5 +1,5 @@
 To do:
-- fix broken online app... modules?
+- fix broken online app... modules? - todo map.py
 - tidy code
 - integers for cash values
 - look at caching
