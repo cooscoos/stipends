@@ -1,4 +1,4 @@
-"""Module for various tax and inflation calcs in the UK."""
+"""Module for various tax and inflation calcs for UK stipends."""
 
 from pathlib import Path
 import pandas as pd

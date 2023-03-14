@@ -1,4 +1,4 @@
-"""Module for handling income calculations for stipends in European countries."""
+"""Module for handling PhD income calculations for European countries."""
 
 from pathlib import Path
 import pandas as pd
@@ -124,8 +124,13 @@ def gbp_worth(df: pd.DataFrame, ppp_df: pd.DataFrame, rates: dict) -> pd.DataFra
     df["corrected_euros"] = df["net_euro"] * df["col_correction"]
     df["corrected_gbp"] =  df["corrected_euros"] * rates.get("GBP")
 
+    # Round to nearest integer
+    df['corrected_euros'] = df['corrected_euros'].round()
+    df['corrected_gbp'] = df['corrected_gbp'].round()
+
     # Make the ISO country code the index of df
     df["country_name"] = df.index
     df.set_index("country_code",inplace=True)
+
 
     return df

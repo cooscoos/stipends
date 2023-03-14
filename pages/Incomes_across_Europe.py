@@ -10,7 +10,7 @@ sys.path.append('../..')
 
 from lib import myplots
 from lib import sthelper
-from lib import curr_conv
+from lib import phdincome
 
 
 # Filepath constants for input data and markdown
@@ -30,7 +30,7 @@ st.warning("These maps are a work in progress and may be inaccurate. If you'd li
 sthelper.write_md(MD_DIR / "map_abstract.md")
 
 # Grab PhD stipend/salary income data from around Europe
-df = curr_conv.get_europe_incomes(INPUT_DIR)
+df = phdincome.get_europe_incomes(INPUT_DIR)
 
 # Use data to plot chloropleths of student income
 map1 = myplots.maps(df,"corrected_gbp","Equivalent income £/yr", INPUT_DIR)

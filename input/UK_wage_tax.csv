@@ -1,4 +1,4 @@
-﻿Year,"UKRI stipend, £ [2]","National min / living wage (NMW/NLW, £/hr) [3]","Personal allowance, £","Average annual council tax (England), £ [4]","Real living wage (RLW, £/hr) [5]"
+﻿Year,"UKRI stipend, £","National min / living wage (NMW/NLW, £/hr)","Personal allowance, £","Average annual council tax (England), £","Real living wage (RLW, £/hr)"
 year,stipend,nmw_rate,allowance,counctax,rlw_rate
 2012,13590,6.19,8105,1201,7.45
 2013,13786,6.31,9440,1045,7.65

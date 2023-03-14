@@ -1,6 +1,5 @@
 """Module to create plots for streamlit pages."""
 
-
 import pandas as pd
 import altair as alt
 from lib import taxinflate
