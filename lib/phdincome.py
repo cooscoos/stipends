@@ -81,8 +81,9 @@ def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
     # Get conversions from local currency to EUR
     conversion = df['curr'].apply(lambda row: rates.get(row))
 
-    # Return net income in euros
+    # Return net income in euros (rounded to nearest euro)
     df['net_euro'] = net_local/conversion
+    df['net_euro'] = df['net_euro'].round()
 
     return df
 
