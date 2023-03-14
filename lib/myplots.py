@@ -61,7 +61,7 @@ def time_series(input_path: Path) -> alt.Chart:
 
 
 def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path) -> folium.Map:
-    """Returns chloropleths of Europe with stipend values. Chloropleths can't be cached, so if caching is
+    """Returns chloropleths of countries in Europe with stipend values. Chloropleths can't be cached, so if caching is
     required, this function should be passed a cached dataframe instead.
      
     Parameters
@@ -80,7 +80,7 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
 
     Returns
     -------
-    alt.Chart time-series.
+    folium.Map: the chloropleth map.
 
     """
 
@@ -96,10 +96,10 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
     df_final = df_final[~df_final['geometry'].isna()]
 
     # Create blank map of Europe
-    map1 = folium.Map(location=[55,18], tiles="CartoDB positron", zoom_control=False,
+    map = folium.Map(location=[55,18], tiles="CartoDB positron", zoom_control=False,
                 zoom_start=4, min_zoom=4,max_zoom=4)
     
-    # Overlay financial data as colour heat map (yellow orange red)
+    # Overlay financial data as a "heat map" (yellow orange red chloropleth)
     folium.Choropleth(
         geo_data=geojson_file.as_posix(),
         name="chloropleth",
@@ -113,9 +113,9 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
         line_opacity=1,
         overlay=False,
         legend_name=legend_name
-    ).add_to(map1)
+    ).add_to(map)
 
-    # Add info on mouse hover
+    # Add map pop up for info on mouse hover
     folium.features.GeoJson(
         data=df_final,
         name=legend_name,
@@ -135,6 +135,6 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
             """,
             max_width=800,),
                 highlight_function=lambda x: {'weight':3,'fillColor':'grey'},
-            ).add_to(map1)
+            ).add_to(map)
 
-    return map1
+    return map

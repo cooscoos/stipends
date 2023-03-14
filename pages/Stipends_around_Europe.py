@@ -1,51 +1,43 @@
 #%%
-
 import streamlit as st
-
+import altair as alt
+from pathlib import Path
 from streamlit_folium import folium_static
 import sys  
+
+# add lib to path
 sys.path.append('../..')
 
 from lib import myplots
-
-#import plotly.express as px
-
 from lib import sthelper
-
 from lib import curr_conv
 
-from pathlib import Path
-#%%
 
-# Define constant paths relative to this file
+# Filepath constants for input data and markdown
+INPUT_DIR = Path.cwd()  / "input"
+MD_DIR = Path.cwd() / "markdown" 
 
-INPUT_DIR = Path.cwd()  / "input"    # location of input data
-MD_DIR = Path.cwd() / "markdown"     # location of markdown
 
-# General webpage set up
+# Webpage set up
 sthelper.sidebar()
 
-# Content of page
+# Page content
 st.title("PhD stipends around Europe")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
+# Introduce the graphs
 st.warning("These maps are a work in progress and may be inaccurate. If you'd like to help fill in some blanks, or if you've spotted a mistake in income or taxes for a country, then please contact me using one of the links in the sidebar to the left.")
-
 sthelper.write_md(MD_DIR / "map_abstract.md")
 
+# Grab PhD stipend/salary income data from around Europe
+df = curr_conv.get_europe_incomes(INPUT_DIR)
 
-df = curr_conv.get_euro(INPUT_DIR)
-
-# todo, this earlier
-df["country_name"] = df.index
-df.set_index("country_code",inplace=True)
-
+# Use data to plot chloropleths of student income
 map1 = myplots.maps(df,"corrected_gbp","Equivalent income £/yr", INPUT_DIR)
 map2 = myplots.maps(df,"net_euro","Absolute income €/yr", INPUT_DIR)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Chart equivalent income (£/yr)", "Map equivalent income (£/yr)", "Map absolute income (€/yr)", "Data"])
 
-import altair as alt
 with tab1:
     st.markdown("#### Equivalent annual income in £ (with purchasing power correction)")
     st.write("Bar chart of annual income in £ (factoring in a correction for the relative cost of living)")
@@ -77,9 +69,5 @@ with tab3:
 
 tab4.write(df)
 
-
-
-
+# Describe the method
 sthelper.write_md(MD_DIR / "map_method.md")
-
-

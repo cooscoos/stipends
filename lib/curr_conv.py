@@ -1,54 +1,62 @@
-"""Module for handling currency and value conversions between European countries."""
+"""Module for handling income calculations for stipends in European countries."""
 
-import pandas as pd
-
+from pathlib import Path
 import pandas as pd
 import requests
-from pathlib import Path
-from lib import curr_conv
 import streamlit as st
 
 
-@st.cache_data(ttl=86400) # cache data for 1 day (86400 seconds)
-def get_api_data():
-    response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
-    rates = response.get('rates')
-    return rates
-
 @st.cache_data(ttl=3600) # cache data for 1 hour
-def get_euro(input_path: Path) -> pd.DataFrame:
+def get_europe_incomes(input_path: Path) -> pd.DataFrame:
+    """Returns the net annual income for PhD students around Europe after taxes and cost of living corrections.
+     
+    Parameters
+    -------
+    input_path: Path
+        Path to input data directory
 
-    # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
+    Returns
+    -------
+    pd.DataFrame The net income of PhD students in euros and gbp before and after cost of living corrections.
+    """
+
+    # Read in Europe data wages and tax data
     input_df = pd.read_csv(input_path / "europe.csv", header=1, index_col=0)
 
     # Get exchange rates from api (or cache)
-    rates = get_api_data()
+    rates = get_api_exrates()
 
-    # Find net annual stipend for all countries in euros
+    # Use income and tax data with exchange rates to calculate net annual stipend for PhD students around Europe in euros
     df = net_income_euros(input_df,rates)
 
-
-    # We could use API to get PPP values, but the connection to oecd doesn't support up-to-date encryption, and isn't updated very often.
+    # We now want to make the cost of living correction. We could use API to get PPP values as follows...
     #oecd_base =  "https://stats.oecd.org/SDMX-JSON/data/"
     #requester = "SNA_TABLE4/AUT+BEL+DNK+FIN+FRA+DEU+IRL+ITA+NLD+NOR+POL+PRT+ESP+SWE+CHE+GBR+USA.PPPGDP.CD/all?startTime=2021&endTime=2022&dimensionAtObservation=allDimensions"
     #response = requests.get(oecd_base + requester)
 
-    # Just use a csv snapshot of this data instead.
-    # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
-    #filename = "SNA_TABLE4_06032023125841319.csv"
-    filename = "SNA_TABLE4_08032023100526351.csv"
-    
-    ppp_df = pd.read_csv(input_path / filename, header=0, index_col=1)
-
-    df["country_code"] = ppp_df["LOCATION"]
-    #df.dropna(inplace=True)
-
-    # now convert to gbp
+    # ...but connection to OECD doesn't support up-to-date encryption.
+    # PPP values are only updated once every 3 years anyway, so just grab data from a local csv.
+    ppp_csv = input_path / "SNA_TABLE4_08032023100526351.csv"
+    ppp_df = pd.read_csv(ppp_csv, header=0, index_col=1)
+       
+    # Use PPP values and exchange rates to convert net euro values to an equivalent gbp after cost of living correction
     df = gbp_worth(df, ppp_df, rates)
-    #final["country_code"] = ppp_df["LOCATION"]
 
-   
     return df
+
+
+@st.cache_data(ttl=86400) # cache data for 1 day (86400 seconds)
+def get_api_exrates() -> dict:
+    """Returns exchange rates for Euros.
+
+    Returns
+    -------
+    dict: Today's exchange rates to Euros.
+    """
+    response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
+    rates = response.get('rates')
+    return rates
+
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
@@ -82,7 +90,8 @@ def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 def gbp_worth(df: pd.DataFrame, ppp_df: pd.DataFrame, rates: dict) -> pd.DataFrame:
-    """Returns the annual income (in £) for a PhD student after purchasing power parity (PPP) correction for the cost of living
+    """Updates the input df with a column that shows the annual income (in £) for a PhD
+    student after purchasing power parity (PPP) correction for the cost of living.
      
     Parameters
     -------
@@ -100,20 +109,23 @@ def gbp_worth(df: pd.DataFrame, ppp_df: pd.DataFrame, rates: dict) -> pd.DataFra
     pd.DataFrame The annual income of PhD student in £ after PPP correction
     """
     
+    # Update income df to have a an ISO 3-letter country code
+    df["country_code"] = ppp_df["LOCATION"]
+
     # PPP values are given in local currency per USD. Convert to euros per USD.
     ppp_df["Unit mult"] = ppp_df['Unit Code'].apply(lambda row: rates.get(row))
     df["ppp"] = ppp_df["Value"] / ppp_df["Unit mult"]
-
-    # The only thing we now care about is this ppp value
-
 
     # Divide ppp values by the UK's to find a multiplier
     base_ppp = df["ppp"][df.index=="United Kingdom"].values[0]
     df["col_correction"] = base_ppp/df["ppp"]
 
+    # Find euros and gbp after a cost of living correction
     df["corrected_euros"] = df["net_euro"] * df["col_correction"]
-
     df["corrected_gbp"] =  df["corrected_euros"] * rates.get("GBP")
 
+    # Make the ISO country code the index of df
+    df["country_name"] = df.index
+    df.set_index("country_code",inplace=True)
 
     return df
