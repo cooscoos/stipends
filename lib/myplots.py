@@ -136,7 +136,5 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
             max_width=800,),
                 highlight_function=lambda x: {'weight':3,'fillColor':'grey'},
             ).add_to(map)
-
-    st.write(df_final)
     
     return map
