@@ -11,6 +11,8 @@ import folium
 from folium.features import GeoJsonTooltip
 import geopandas as gpd
 
+import streamlit as st
+
 
 
 def time_series(input_path: Path) -> alt.Chart:
@@ -31,7 +33,7 @@ def time_series(input_path: Path) -> alt.Chart:
 
     wage_file = input_path / "UK_wage_tax.csv"
     
-
+    # to do separate out and cache?
     input_df = pd.read_csv(wage_file, header=1, index_col=0)
 
     df = pd.DataFrame()

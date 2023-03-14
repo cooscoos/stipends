@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import pandas as pd
-
+import streamlit as st
 
 
 from enum import Enum
@@ -17,7 +17,7 @@ class Wage(str,Enum):
     RLW = "rlw"
     STP = "stipend"
 
-
+@st.cache_data(ttl=3600) # cache data for 1 hour
 def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFrame:
     """Returns the net annual income after income tax, national insurance, and typical council tax payments,
     assuming that all income tax is paid at the lowest rate (20%). Valid for years 2012 and beyond.
@@ -68,7 +68,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFram
 
 
 
-
+@st.cache_data(ttl=3600) # cache data for 1 hour
 def real_mult(base_year: int, input_path: Path) -> pd.DataFrame:
     """Use inflation to calculate real value multipliers for each year relative to a base year.
     

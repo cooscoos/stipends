@@ -6,18 +6,23 @@ import pandas as pd
 import requests
 from pathlib import Path
 from lib import curr_conv
+import streamlit as st
 
 
+@st.cache_data(ttl=86400) # cache data for 1 day (86400 seconds)
+def get_api_data():
+    response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
+    rates = response.get('rates')
+    return rates
 
-
+@st.cache_data(ttl=3600) # cache data for 1 hour
 def get_euro(input_path: Path) -> pd.DataFrame:
 
     # Read in Europe data wages and tax data and calculate inflation-adjusted net annual incomes
     input_df = pd.read_csv(input_path / "europe.csv", header=1, index_col=0)
 
-    # Get exchange rates, todo cache and get once per day
-    response = requests.get('https://api.exchangerate-api.com/v4/latest/euro').json()
-    rates = response.get('rates')
+    # Get exchange rates from api (or cache)
+    rates = get_api_data()
 
     # Find net annual stipend for all countries in euros
     df = net_income_euros(input_df,rates)
@@ -45,7 +50,7 @@ def get_euro(input_path: Path) -> pd.DataFrame:
    
     return df
 
-
+@st.cache_data(ttl=3600) # cache data for 1 hour
 def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
     """Returns the net annual income (in Euros) for a PhD student after taxes
      
@@ -75,7 +80,7 @@ def net_income_euros(df: pd.DataFrame, rates: dict) -> pd.DataFrame:
 
 
 
-
+@st.cache_data(ttl=3600) # cache data for 1 hour
 def gbp_worth(df: pd.DataFrame, ppp_df: pd.DataFrame, rates: dict) -> pd.DataFrame:
     """Returns the annual income (in £) for a PhD student after purchasing power parity (PPP) correction for the cost of living
      
