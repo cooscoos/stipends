@@ -22,7 +22,7 @@ MD_DIR = Path.cwd() / "markdown"
 sthelper.sidebar()
 
 # Page content
-st.title("PhD stipends around Europe")
+st.title("PhD incomes across Europe")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
 # Introduce the graphs
