@@ -1,20 +1,20 @@
 #%%
+from pathlib import Path
 import streamlit as st
 
 from lib import myplots
 from lib import sthelper
-from pathlib import Path
 
 
-# Define filepath consts relative to this file
-INPUT_DIR = Path.cwd()  / "input"    # location of input data
-MD_DIR = Path.cwd() / "markdown"     # location of markdown
+# Filepath constants for input data and markdown
+INPUT_DIR = Path.cwd()  / "input"
+MD_DIR = Path.cwd() / "markdown"
 
-# General webpage set up
+# Webpage set up
 st.set_page_config(page_title="UKRI Stipends", page_icon=":eyeglasses:")
-sthelper.preamble()
+sthelper.sidebar()
 
-# Content of page
+# Page content
 st.title("UK PhD stipends: the last decade")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 

@@ -14,14 +14,15 @@ import geopandas as gpd
 import streamlit as st
 
 
-
+@st.cache_data(ttl=3600) # Cache data and graphs for 1 hour
 def time_series(input_path: Path) -> alt.Chart:
     """Returns an altair chart: a time-series of real income from PhD stipends and salaried work.
+    Caches data for one hour after reading in once from the input directory.
      
     Parameters
     -------
     input_path: Path
-        Path to data input directory
+        Path to input data directory
 
     Returns
     -------
@@ -29,11 +30,8 @@ def time_series(input_path: Path) -> alt.Chart:
 
     """
 
-    # Read in UK wages and tax data and calculate inflation-adjusted net annual incomes
-
+    # Read in UK wages and tax data
     wage_file = input_path / "UK_wage_tax.csv"
-    
-    # to do separate out and cache?
     input_df = pd.read_csv(wage_file, header=1, index_col=0)
 
     df = pd.DataFrame()
@@ -63,12 +61,22 @@ def time_series(input_path: Path) -> alt.Chart:
 
 
 def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path) -> folium.Map:
-    """Returns chloropleths of Europe with stipend values.
+    """Returns chloropleths of Europe with stipend values. Chloropleths can't be cached, so if caching is
+    required, this function should be passed a cached dataframe instead.
      
     Parameters
     -------
+    df: pd.DataFrame
+        Dataframe of European stipends and taxes with index set to ISO 3-letter European country code
+
+    column_name: str
+        The column name of df to plot on the chloropleth map
+
+    legend_name: str
+        A human-readable name for what the column data are
+    
     input_path: Path
-        UK wage and tax data.
+        Path to input data directory
 
     Returns
     -------
@@ -76,33 +84,29 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
 
     """
 
+    # Read in geojson data: this contains polygons that describe European country borders
+    geojson_file = input_path / "custom.geojson"
+    geojson_df = gpd.read_file(geojson_file)
 
-
-    json1 = input_path / "custom.geojson"
-
-    geojson = gpd.read_file(json1)
-
-    # These steps are optional but it makes it easier to view geojson data alongside df
-    geojson = geojson[['adm0_iso','geometry']]
-    geojson.set_index("adm0_iso",inplace=True)
-    df_final = geojson.merge(df, left_index=True,right_index=True)
+    # Pick out geometry info and then merge geojson and financial df into a single dataframe.
+    # This is optional, but it makes it easier to debug and sanity check the mapping.
+    geojson_df = geojson_df[['adm0_iso','geometry']]
+    geojson_df.set_index("adm0_iso",inplace=True)
+    df_final = geojson_df.merge(df, left_index=True,right_index=True)
     df_final = df_final[~df_final['geometry'].isna()]
 
- 
+    # Create blank map of Europe
     map1 = folium.Map(location=[55,18], tiles="CartoDB positron", zoom_control=False,
                 zoom_start=4, min_zoom=4,max_zoom=4)
     
-    map1
-    #custom_scale = (df[column_name].quantile((0,0.2,0.4,0.6,0.8,0.9,1))).tolist()
-
+    # Overlay financial data as colour heat map (yellow orange red)
     folium.Choropleth(
-        geo_data=json1.as_posix(),
+        geo_data=geojson_file.as_posix(),
         name="chloropleth",
         data=df_final,
         columns=[df_final.index,column_name],
         key_on="feature.properties.adm0_iso",
         fill_color="YlOrRd",
-        #threshold_scale=custom_scale,
         nan_fill_color="White",
         highlight=True,
         fill_opacity=0.7,
@@ -111,6 +115,7 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
         legend_name=legend_name
     ).add_to(map1)
 
+    # Add info on mouse hover
     folium.features.GeoJson(
         data=df_final,
         name=legend_name,

@@ -23,7 +23,7 @@ INPUT_DIR = Path.cwd()  / "input"    # location of input data
 MD_DIR = Path.cwd() / "markdown"     # location of markdown
 
 # General webpage set up
-sthelper.preamble()
+sthelper.sidebar()
 
 # Content of page
 st.title("PhD stipends around Europe")
@@ -32,7 +32,6 @@ st.info("Click on the left sidebar menu to navigate to other charts.")
 st.warning("These maps are a work in progress and may be inaccurate. If you'd like to help fill in some blanks, or if you've spotted a mistake in income or taxes for a country, then please contact me using one of the links in the sidebar to the left.")
 
 sthelper.write_md(MD_DIR / "map_abstract.md")
-
 
 
 df = curr_conv.get_euro(INPUT_DIR)

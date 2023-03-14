@@ -18,10 +18,9 @@ def write_md(md_file: Path):
         st.markdown(line)
     f.close()
 
-def preamble():
-    """Preamble and set up for every streamlit page incl set up sidebar."""
+def sidebar():
+    """Set up the sidebar for the streamlit page."""
 
-    #st.set_page_config(layout="wide")
     st.sidebar.info(
     """
     [WebApp](https://cooscoos-stipends-time-series-e8m8oo.streamlit.app/) | [GitHub](https://github.com/cooscoos/stipends) | [Twitter](https://twitter.com/CivilPerry)
