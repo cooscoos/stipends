@@ -15,7 +15,7 @@ st.set_page_config(page_title="UKRI Stipends", page_icon=":eyeglasses:")
 sthelper.preamble()
 
 # Content of page
-st.title("UK PhD stipends over time")
+st.title("UK PhD stipends: the last decade")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
 sthelper.write_md(MD_DIR / "ts_abstract.md")

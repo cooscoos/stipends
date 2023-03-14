@@ -35,15 +35,13 @@ Countries below which are denoted "None" mean that:
 - no grants for UK citizens could be found, and/or;
 - the sources of information found were not in English.
 
-If you'd like to help us fill in some blanks, or if you've spotted a mistake in income or taxes for a country, then please contact me on Twitter.
+If you'd like to help fill in some blanks, or if you've spotted a mistake in income or taxes for a country, then please contact me using the links in the sidebar on the left.
 
 ##### Austria
 
 Austria’s Agency for Education and Internationalisation have a grant funding tool [[A1]](https://grants.at/en/) that shows PhD scholarships for UK students have stipends that range from gross €32,000/yr to €42,000/yr [[AUT1]](https://phd.pages.ista.ac.at/funding-and-awards/). Austrian PhDs are paid 14 times per year rather than 12.
 
-Fees for international students are typically €1500/yr [[AUT2]](https://www.findaphd.com/guides/phd-study-in-austria), althought a scholarship would normally waive or pay for these.
-
-Here, we onerously assume a gross income €32,000/yr is taxed, and then subject to €1500/yr fees. Even with these assumptions, Austria's PhD incomes are some of the most generous for UK citizens within Europe at the time of writing (Spring 2023).
+Fees for international students are typically €1500/yr [[AUT2]](https://www.findaphd.com/guides/phd-study-in-austria). A scholarship would normally waive or pay for these, but here, we onerously assume a gross income €32,000/yr is taxed, and then subject to €1500/yr fees.
 
 
 ##### Belgium

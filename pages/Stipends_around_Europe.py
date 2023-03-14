@@ -29,6 +29,8 @@ sthelper.preamble()
 st.title("PhD stipends around Europe")
 st.info("Click on the left sidebar menu to navigate to other charts.")
 
+st.warning("These maps are a work in progress and may be inaccurate. If you'd like to help fill in some blanks, or if you've spotted a mistake in income or taxes for a country, then please contact me using one of the links in the sidebar to the left.")
+
 sthelper.write_md(MD_DIR / "map_abstract.md")
 
 
@@ -75,6 +77,7 @@ with tab3:
     folium_static(map2,width=800,height=800)
 
 tab4.write(df)
+
 
 
 
