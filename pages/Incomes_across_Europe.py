@@ -19,7 +19,7 @@ MD_DIR = Path.cwd() / "markdown"
 
 
 # Webpage set up
-sthelper.sidebar()
+sthelper.do_sidebar()
 
 # Page content
 st.title("PhD incomes across Europe")

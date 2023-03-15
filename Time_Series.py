@@ -12,7 +12,7 @@ MD_DIR = Path.cwd() / "markdown"
 
 # Webpage set up
 st.set_page_config(page_title="UKRI Stipends", page_icon=":eyeglasses:")
-sthelper.sidebar()
+sthelper.do_sidebar()
 
 # Page content
 st.title("UK PhD stipends: the last decade")

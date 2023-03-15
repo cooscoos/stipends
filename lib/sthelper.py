@@ -18,7 +18,7 @@ def write_md(md_file: Path):
         st.markdown(line)
     f.close()
 
-def sidebar():
+def do_sidebar():
     """Set up the sidebar for the streamlit page."""
 
     st.sidebar.info(
