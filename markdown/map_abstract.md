@@ -1,7 +1,7 @@
-The tabs below show charts and maps of the annual income from typical PhD stipends around Western and Northern Europe with and without a cost of living (CoL) correction.
+The tabs below show charts and maps of the typical annual net income of PhD students around Western and Northern Europe. Tabs show:
 
-In some countries, PhD students are salaried employees. For these countries:
+- a bar chart (tab 1) and heat map (tab 2) showing what the UK PhD stipend would need to be to match typical PhD incomes in other countries (this accounts for local taxes and variations in the cost of living);
+- a heat map of the absolute net income of PhD students around Europe (tab 3), and;
+- the raw data (tab 4).
 
-- typical income taxes are deducted, but;
-- the benefits of contributing to a state pension are ignored.
-
+Some countries treat PhD students as salaried employees. Our analysis applies taxes to this income, but the benefits of contributing to a state pension are ignored.

@@ -17,8 +17,8 @@ UKRI stipends are not subject to income taxes, and PhD students do not pay counc
 For salaried jobs at NLW / RLW rates:
 
 - Income tax of 20% is applied to income above the personal allowance for that year.
-- National insurance contributions on 37.5&nbsp;hr/wk minimum / real living wage jobs have hovered between £550-£650/yr over the last decade, so we subtract a flat quantity of £600.
-- Average historical council tax figures can be found in [[5]](https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax), and we have subtracted the average for England in each year. This is done to make the net incomes from salaried work and PhD stipends comparable.
+- National insurance contributions of £600/yr are deducted (this is a typical value for 40&nbsp;hr/wk work over the last decade).
+- Average historical council tax values are deducted to make the net incomes from salaried work and PhD stipends comparable. Historical rates can be found in [[5]](https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax), and we have subtracted the average value for England each year.
 
 The final net income for salaried NLW / RLW jobs is therefore:
 
@@ -28,10 +28,10 @@ Net income = gross annual salary - income tax - national insurance - council tax
 
 The real value of income from previous years can be calculated using the consumer price index with housing costs (CPIH), taken from the ONS [[6]](https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l522/mm23). For incomplete years, annual CPIH is estimated as the mean of the CPIH values for available months.
 
-If you had income, $I$, in 2013 and wanted to calculate what its equivalent value, $R$, would be in 2023, you would use: 
+If you had an income, $I$, in 2013 and wanted to calculate what its equivalent value, $R$, would be in 2023, you would use: 
 
 $$ R = I \times {C(2023) \over C(2013)} $$,
 
-where $C(2023)$ and $C(2013)$ are the CPIH values in 2023 and 2013 respectively. In the time series graph, the net incomes from UKRI stipends, NLW / RLW are inflation adjusted using equations of this form.
+where $C(2023)$ and $C(2013)$ are the CPIH values in 2023 and 2013 respectively. In the time series graph, the net incomes from stipends and salaried work are inflation adjusted using equations of this form.
 
-Inflation adjustment is not required to show that PhD stipends and the NLW have converged, but it does show that PhD stipends have not kept pace with RLW income.
+Inflation adjustment is not required to show that PhD stipends and the NLW have converged, but it does show that the real value of PhD stipends have remained constant.
