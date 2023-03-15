@@ -4,4 +4,4 @@ The tabs below show charts and maps of the typical annual net income of PhD stud
 - a heat map of the absolute net income of PhD students around Europe (tab 3), and;
 - the raw data (tab 4).
 
-Some countries treat PhD students as salaried employees. Our analysis applies taxes to this income, but the benefits of contributing to a state pension are ignored.
+Some countries treat PhD students as salaried employees. Our analysis applies taxes to this income, but employee benefits like state pension and parental leave rights are ignored and not quantified.
