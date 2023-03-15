@@ -1,3 +1,3 @@
+
 To do:
-- fix FRA bug
-- proof read
+- Fix bug with France not appearing on chloropleth hover.
