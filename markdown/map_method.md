@@ -72,7 +72,9 @@ Germany Universities and institutions typically offer salaries at 65% of TVöD 1
 
 Germany's tax system is quite complicated, but here we assume the €32,000/yr salary is taxed at category I in Berlin. This results in taxes and social securities of around €9,600/yr.
 
-##### Italy (None)
+##### Italy
+
+Italian scholarships funded by the Ministry of Education or by Universities themselves are typically gross €16,243/yr [[ITA1]](https://www.unibo.it/en/teaching/phd/information-enrolling-phd-programme/faq-frequently-asked-questions-on-the-phd-call-for-applications-and-selection-procedures). Fees in Italian Universities are the same for national and international students and are around €160/yr [[ITA1]](https://www.unibo.it/en/teaching/phd/information-enrolling-phd-programme/faq-frequently-asked-questions-on-the-phd-call-for-applications-and-selection-procedures).
 
 ##### Ireland
 
