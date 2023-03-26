@@ -59,7 +59,7 @@ Fees for international students vary but are typically around 6700&nbsp;krone/yr
 
 ##### Finland
 
-Info on full scholarships for PhD students from the UK could not be found. Finland do not charge fees [[FIN1]](https://www.findaphd.com/guides/phd-study-in-finland).
+Finland do not charge fees [[FIN1]](https://www.findaphd.com/guides/phd-study-in-finland) as PhD students are employed as salaried workers, earning gross €2,316 per month (see appendix 5, level 3 of [[FIN2]](https://www.sivista.fi/esittely/in-english/general-collective-agreement-for-universities/)).
 
 ##### France
 
