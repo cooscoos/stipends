@@ -51,7 +51,7 @@ ptyprocess==0.7.0
 pure-eval==0.2.2
 pyarrow==14.0.1
 pydeck==0.8.0
-Pygments==2.14.0
+Pygments==2.15.0
 Pympler==1.0.1
 pyproj==3.4.1
 pyrsistent==0.19.3
