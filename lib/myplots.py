@@ -14,14 +14,17 @@ import streamlit as st
 
 
 @st.cache_data(ttl=3600) # Cache data and graphs for 1 hour
-def time_series(input_path: Path) -> alt.Chart:
+def time_series(input_path: Path, base_year: int) -> alt.Chart:
     """Returns an altair chart: a time-series of real income from PhD stipends and salaried work.
     Caches data for one hour after reading in once from the input directory.
-     
+
     Parameters
     -------
     input_path: Path
         Path to input data directory
+
+    base_year: int
+        The year to adjust real value to (usually the present year)
 
     Returns
     -------
@@ -34,9 +37,9 @@ def time_series(input_path: Path) -> alt.Chart:
     input_df = pd.read_csv(wage_file, header=1, index_col=0)
 
     df = pd.DataFrame()
-    df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW, input_path)
-    df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW, input_path)
-    df["Stipend"] = taxinflate.net_income_df(input_df,Wage.STP, input_path)
+    df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW, input_path, base_year)
+    df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW, input_path, base_year)
+    df["Stipend"] = taxinflate.net_income_df(input_df, Wage.STP, input_path, base_year)
 
     # Convert wide-form dataframe to the long-form preferred by altair
     df["year"] = df.index
@@ -50,7 +53,7 @@ def time_series(input_path: Path) -> alt.Chart:
         x='year:O',
         y=alt.Y('income:Q',
             axis=alt.Axis(title="Real annual net income (£)"),
-            scale=alt.Scale(domain=(12000,19000))
+            scale=alt.Scale(domain=(12000,20000))
         ),
         color=alt.Color('income_type:N',legend=alt.Legend(title="Income type"))
     )
@@ -62,7 +65,7 @@ def time_series(input_path: Path) -> alt.Chart:
 def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path) -> folium.Map:
     """Returns chloropleths of countries in Europe with stipend values. Chloropleths can't be cached, so if caching is
     required, this function should be passed a cached dataframe instead.
-     
+
     Parameters
     -------
     df: pd.DataFrame
@@ -73,7 +76,7 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
 
     legend_name: str
         A human-readable name for what the column data are
-    
+
     input_path: Path
         Path to input data directory
 
@@ -97,7 +100,7 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
     # Create blank map of Europe
     map = folium.Map(location=[55,18], tiles="CartoDB positron", zoom_control=False,
                 zoom_start=4, min_zoom=4,max_zoom=4)
-    
+
     # Overlay financial data as a "heat map" (yellow orange red chloropleth)
     folium.Choropleth(
         geo_data=geojson_file.as_posix(),
@@ -123,7 +126,7 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
         style_function=lambda x: {'color':'black','fillColor':'transparent','weight':0.5},
         tooltip=GeoJsonTooltip(
             fields=["country_name", column_name],
-            aliases=["Country", legend_name], 
+            aliases=["Country", legend_name],
             localize=True,
             sticky=False,
             labels=True,
@@ -136,5 +139,5 @@ def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path)
             max_width=800,),
                 highlight_function=lambda x: {'weight':3,'fillColor':'grey'},
             ).add_to(map)
-    
+
     return map

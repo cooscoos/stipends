@@ -10,6 +10,9 @@ from lib import sthelper
 INPUT_DIR = Path.cwd()  / "input"
 MD_DIR = Path.cwd() / "markdown"
 
+# Base year for real value calculations
+BASE_YEAR = 2024
+
 # Webpage set up
 st.set_page_config(page_title="UKRI Stipends", page_icon=":eyeglasses:")
 sthelper.do_sidebar()
@@ -22,7 +25,7 @@ st.info("Click on the left sidebar menu to navigate to other charts.")
 sthelper.write_md(MD_DIR / "ts_abstract.md")
 
 # Create and plot time-series chart on the page
-c = myplots.time_series(INPUT_DIR)
+c = myplots.time_series(INPUT_DIR, BASE_YEAR)
 st.altair_chart(c,use_container_width=True)
 
 # Describe the method

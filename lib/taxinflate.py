@@ -18,19 +18,19 @@ class Wage(str,Enum):
     STP = "stipend"
 
 
-def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFrame:
+def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path, base_year: int) -> pd.DataFrame:
     """Returns the net annual income after income tax, national insurance, and typical council tax payments,
     assuming that all income tax is paid at the lowest rate (20%). Valid for years 2012 and beyond.
-    
-    
+
+
     Parameters
     -------
     df: pd.DataFrame
         Income data. Must contain a rate, counctax, and allowance fields.
 
     wage: WageType
-        Either national minimum / real living 
-    
+        Either national minimum / real living
+
     base_year: int
         The year to adjust real value to (usually the present year)
 
@@ -44,7 +44,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFram
 
     """
 
-    
+
     match wage:
         case Wage.NLW | Wage.RLW:
             # Assume 1950 work hours per year
@@ -62,7 +62,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFram
             net_income = df["stipend"]
 
     # Inflation adjust the income to find its real value today (in base year)
-    real_income = net_income * real_mult(2023, input_path)
+    real_income = net_income * real_mult(base_year, input_path)
 
     return real_income
 
@@ -71,7 +71,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path) -> pd.DataFram
 @st.cache_data(ttl=3600) # cache data for 1 hour
 def real_mult(base_year: int, input_path: Path) -> pd.DataFrame:
     """Use inflation to calculate real value multipliers for each year relative to a base year.
-    
+
     Parameters
     -------
     base_year: int
@@ -96,5 +96,3 @@ def real_mult(base_year: int, input_path: Path) -> pd.DataFrame:
     mult = base_cpih / df["cpih"]
 
     return mult
-
-
