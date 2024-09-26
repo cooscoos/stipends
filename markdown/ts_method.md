@@ -30,9 +30,7 @@ The real value of income from previous years can be calculated using the consume
 
 If you had an income, $I$, in 2013 and wanted to calculate what its equivalent value, $R$, would be in 2023, you would use:
 
-$$
-R = I \times {C(2023) \over C(2013)},
-$$
+$$R = I \times {C(2023) \over C(2013)},$$
 
 where $C(2023)$ and $C(2013)$ are the CPIH values in 2023 and 2013 respectively. In the time series graph, the net incomes from stipends and salaried work are inflation adjusted using equations of this form.
 
@@ -43,9 +41,7 @@ Inflation adjustment is not required to show that PhD stipends and the NLW have 
 
 NMW, RLW and Stipends are all announced and come into effect at different times. This is accounted for by offsetting the time points for each income type by $F$ months:
 
-$$
-F = m + i,
-$$
+$$F = m + i,$$
 
 where $m$ is the month that the income type is announced, $i$ is the implementation delay.
 
