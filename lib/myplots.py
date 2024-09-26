@@ -69,12 +69,13 @@ def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFra
     c = alt.Chart(df,height=450).mark_line(
         point=alt.OverlayMarkDef(filled=False, fill="white")
     ).encode(
-        x=alt.X('midpoint_datetime:T', axis=alt.Axis(format='%Y'), title='Date'),
+        x=alt.X('midpoint_datetime:T', axis=alt.Axis(format='%m/Y'), title='Date'),
         y=alt.Y('income:Q',
                 axis=alt.Axis(title="Real annual net income (£)"),
                 scale=alt.Scale(domain=(12000,20000))
                 ),
         color=alt.Color('income_type:N', legend=alt.Legend(title="Income type"))
+        tooltip=alt.Tooltip('midpoint_datetime:T', format='%m %Y', title='Month')
     ).properties(
         title=f"Inflation adjusted to {base_year}"
     )
