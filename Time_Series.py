@@ -25,7 +25,7 @@ st.info("Click on the left sidebar menu to navigate to other charts.")
 sthelper.write_md(MD_DIR / "ts_abstract.md")
 
 # Create and plot time-series chart on the page
-c = myplots.time_series(INPUT_DIR, BASE_YEAR)
+c, _ = myplots.time_series(INPUT_DIR, BASE_YEAR)
 st.altair_chart(c,use_container_width=True)
 
 # Describe the method

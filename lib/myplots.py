@@ -6,15 +6,30 @@ from lib import taxinflate
 from pathlib import Path
 from lib.taxinflate import Wage
 
+from typing import Tuple
+
 import folium
 from folium.features import GeoJsonTooltip
 import geopandas as gpd
 
 import streamlit as st
 
+# Time offsets that apply to each income type. See the ts_method.md for justification.
+TIME_OFFSETS = {
+    'NLW': 4+0,    # April(4) + immediate implementation
+    'RLW': 11+6,   # End of October(11) + 6 month implementation
+    'Stipend': 8+0,  # August(8) + immediate implementation
+}
+
+
+def add_time_offset(row):
+    """Adjusts the year of a given row to the correct date based on the income type."""
+    offset = TIME_OFFSETS.get(row['income_type'], 0)
+    return row['year'] + pd.DateOffset(months=offset)
+
 
 @st.cache_data(ttl=3600) # Cache data and graphs for 1 hour
-def time_series(input_path: Path, base_year: int) -> alt.Chart:
+def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFrame]:
     """Returns an altair chart: a time-series of real income from PhD stipends and salaried work.
     Caches data for one hour after reading in once from the input directory.
 
@@ -29,7 +44,7 @@ def time_series(input_path: Path, base_year: int) -> alt.Chart:
     Returns
     -------
     alt.Chart time-series.
-
+    pd.DataFrame: the data used to create the time-series.
     """
 
     # Read in UK wages and tax data
@@ -45,19 +60,26 @@ def time_series(input_path: Path, base_year: int) -> alt.Chart:
     df["year"] = df.index
     df = df.melt(id_vars='year',var_name="income_type",value_name="income")
 
+    # Adjust the year to the correct date using an offset based on the income type
+    df['year'] = pd.to_datetime(df['year'], format='%Y')
+    df['midpoint_datetime'] = df.apply(add_time_offset, axis=1)
+
     # Define a time-series chart
     # Info on type notation: https://altair-viz.github.io/altair-tutorial/notebooks/02-Simple-Charts.html
     c = alt.Chart(df,height=450).mark_line(
         point=alt.OverlayMarkDef(filled=False, fill="white")
     ).encode(
-        x='year:O',
+        x=alt.X('midpoint_datetime:T', axis=alt.Axis(format='%Y'), title='Date'),
         y=alt.Y('income:Q',
-            axis=alt.Axis(title="Real annual net income (£)"),
-            scale=alt.Scale(domain=(12000,20000))
-        ),
-        color=alt.Color('income_type:N',legend=alt.Legend(title="Income type"))
+                axis=alt.Axis(title="Real annual net income (£)"),
+                scale=alt.Scale(domain=(12000,20000))
+                ),
+        color=alt.Color('income_type:N', legend=alt.Legend(title="Income type"))
+    ).properties(
+        title=f"Inflation adjusted to {base_year}"
     )
-    return c
+
+    return (c, df)
 
 
 
