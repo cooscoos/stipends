@@ -16,9 +16,9 @@ import streamlit as st
 
 # Time offsets that apply to each income type. See the ts_method.md for justification.
 TIME_OFFSETS = {
-    'NLW': 4+0,    # April(4) + immediate implementation
-    'RLW': 11+6,   # End of October(11) + 6 month implementation
-    'Stipend': 8+0,  # August(8) + immediate implementation
+    'NLW': 3,    # Start of April(4-1=3) + immediate implementation
+    'RLW': 10+6,   # End of October(10) + 6 month implementation (May following year)
+    'Stipend': 8-1+0,  # Start of August(8-1) + immediate implementation
 }
 
 
