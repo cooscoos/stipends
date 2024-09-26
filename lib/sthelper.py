@@ -5,7 +5,7 @@ from pathlib import Path
 
 def write_md(md_file: Path):
     """Writes a markdown file located at md_file to a streamlit webpage.
-    
+
     Parameters
     -------
     md_file: Path
@@ -23,6 +23,6 @@ def do_sidebar():
 
     st.sidebar.info(
     """
-    [WebApp](https://cooscoos-stipends-time-series-e8m8oo.streamlit.app/) | [GitHub](https://github.com/cooscoos/stipends) | [Twitter](https://twitter.com/CivilPerry)
+    [Source (GitHub)](https://github.com/cooscoos/stipends)
     """
     )
