@@ -75,7 +75,6 @@ def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFra
                 scale=alt.Scale(domain=(12000,20000))
                 ),
         color=alt.Color('income_type:N', legend=alt.Legend(title="Income type"))
-        tooltip=alt.Tooltip('midpoint_datetime:T', format='%m %Y', title='Month')
     ).properties(
         title=f"Inflation adjusted to {base_year}"
     )
