@@ -27,4 +27,3 @@ st.altair_chart(c,use_container_width=True)
 
 # Describe the method
 sthelper.write_md(MD_DIR / "ts_method.md")
-

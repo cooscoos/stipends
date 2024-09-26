@@ -1,4 +1,6 @@
-The tabs below show charts and maps of the typical annual net income of PhD students around Western and Northern Europe. Tabs show:
+The tabs below show charts and maps of the typical annual net income of PhD students around Western and Northern Europe in 2023. The data for these charts are more onerous to get, so they're updated less frequently.
+
+Tabs show:
 
 - a bar chart (tab 1) and heat map (tab 2) showing what the UK PhD stipend would need to be to match typical PhD incomes in other countries (this accounts for local taxes and variations in the cost of living);
 - a heat map of the absolute net income of PhD students around Europe (tab 3), and;
