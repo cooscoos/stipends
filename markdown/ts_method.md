@@ -46,6 +46,6 @@ $$F = m + i,$$
 where $m$ is the month that the income type is announced, $i$ is the implementation delay.
 
 For example:
-- NLW increases come into effect each April (month $m=4$). They are implemented immediately ($i=0$). Their offset is therefore month in $F=4$ of the year they are announced.
-- RLW is announced at the end of October (month $m=11$). Employers have $i=6$ months to implement them. Their offset is therefore $F=11+6=17$ months after January of the year they are announced (their effective start time is in May of the following year)
-- UKRI stipends come into effect immediately in August of the year they are announced ($m=8$, $i=0$, so $F=8$ months).
+- NLW increases come into effect each April (this is $m=+3$ months after January). They are implemented immediately ($i=0$), and so $F=3$.
+- RLW is announced at the end of October (or $m=10$ months after January). Employers have $i=6$ months to implement them, so they come into effect at the start of May in the following year.
+- UKRI stipends come into effect immediately in August of the year they are announced ($m=7$, $i=0$, so $F=7$ months).
