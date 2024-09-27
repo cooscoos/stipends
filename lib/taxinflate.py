@@ -18,7 +18,9 @@ class Wage(str,Enum):
     NLW = "nmw"
     RLW = "rlw"
     STP = "stipend"
-    GRAD = "grad_mean"
+    GRAD = "Graduate"
+    NONGRAD = "Non-Graduate"
+    POSTGRAD = "Postgraduate"
 
 
 def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path, base_year: int) -> pd.DataFrame:
@@ -63,7 +65,7 @@ def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path, base_year: int
 
         case Wage.STP:
             net_income = df["stipend"]
-        case  Wage.GRAD:
+        case  Wage.GRAD | Wage.NONGRAD | Wage.POSTGRAD:
             gross_annual = df[f'{wage}']
             income_tax = (gross_annual - df["allowance"])*0.2
             nat_ins = 600

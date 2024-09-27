@@ -19,7 +19,9 @@ TIME_OFFSETS = {
     'NLW': 3+0,    # Start of April(m=+3 months after January) + immediate implementation (i=+0)
     'RLW': 10+6,   # End of October(m=+10) + 6 month implementation
     'Stipend': 7+0,  # Start of August(m=+7) + immediate implementation
-    'Graduate': 0,  # No time offset for graduate income
+    'Graduate': +6,  # median salary data is for the middle of the year
+    'Non-Graduate': +6,
+    'Postgraduate': +6
 }
 
 
@@ -48,15 +50,39 @@ def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFra
     pd.DataFrame: the data used to create the time-series.
     """
 
-    # Read in UK wages and tax data
     wage_file = input_path / "UK_wage_tax.csv"
     input_df = pd.read_csv(wage_file, header=1, index_col=0)
+
+    # Read in and handle the graduate data
+    # read in yearly_salaries_by_gender2_200723.csv
+    grad_df = pd.read_csv(input_path / "yearly_salaries_by_gender2_200723.csv")
+
+    # remove gender=Male and gender=Female rows
+    grad_df = grad_df[grad_df['gender'].apply(lambda x: x not in ['Male', 'Female'])]
+
+    # only keep age group 21-30
+    grad_df = grad_df[grad_df['age_group'] == '21-30']
+
+    # only keep time_period, graduate_type and median columns
+    grad_df = grad_df[['time_period', 'graduate_type', 'median']]
+
+    grad_df = grad_df.pivot(index='time_period', columns='graduate_type', values='median').reset_index()
+
+    # rename time period to time
+    grad_df.rename(columns={'time_period': 'year'}, inplace=True)
+    grad_df = grad_df.set_index('year')
+
+    #merge input_df and graddf on year
+    input_df = input_df.merge(grad_df, left_index=True, right_index=True)
+
 
     df = pd.DataFrame()
     df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW, input_path, base_year)
     df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW, input_path, base_year)
     df["Stipend"] = taxinflate.net_income_df(input_df, Wage.STP, input_path, base_year)
     df["Graduate"] = taxinflate.net_income_df(input_df, Wage.GRAD, input_path, base_year)
+    df["Non-Graduate"] = taxinflate.net_income_df(input_df, Wage.NONGRAD, input_path, base_year)
+    df["Postgraduate"] = taxinflate.net_income_df(input_df, Wage.POSTGRAD, input_path, base_year)
 
     # Convert wide-form dataframe to the long-form preferred by altair
     df["year"] = df.index
@@ -74,10 +100,11 @@ def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFra
         x=alt.X('midpoint_datetime:T', axis=alt.Axis(format='%Y'), title='Date'),
         y=alt.Y('income:Q',
                 axis=alt.Axis(title="Real annual net income (£)"),
-                scale=alt.Scale(domain=(12000,20000))
+                scale=alt.Scale(domain=(12000,32000))
                 ),
         color=alt.Color('income_type:N', legend=alt.Legend(title="Income type")),
-        tooltip=alt.Tooltip('midpoint_datetime:T', format='%m/%Y', title='Date')
+        tooltip=[alt.Tooltip('midpoint_datetime:T', format='%m/%Y', title='Date'),
+                alt.Tooltip('income:Q', title='Income')]
     ).properties(
         title=f"Inflation adjusted to {base_year}"
     )
