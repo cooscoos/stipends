@@ -19,6 +19,7 @@ TIME_OFFSETS = {
     'NLW': 3+0,    # Start of April(m=+3 months after January) + immediate implementation (i=+0)
     'RLW': 10+6,   # End of October(m=+10) + 6 month implementation
     'Stipend': 7+0,  # Start of August(m=+7) + immediate implementation
+    'Graduate': 0,  # No time offset for graduate income
 }
 
 
@@ -55,6 +56,7 @@ def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFra
     df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW, input_path, base_year)
     df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW, input_path, base_year)
     df["Stipend"] = taxinflate.net_income_df(input_df, Wage.STP, input_path, base_year)
+    df["Graduate"] = taxinflate.net_income_df(input_df, Wage.GRAD, input_path, base_year)
 
     # Convert wide-form dataframe to the long-form preferred by altair
     df["year"] = df.index

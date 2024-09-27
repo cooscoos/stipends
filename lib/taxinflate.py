@@ -11,11 +11,14 @@ class Wage(str,Enum):
 
     - NLW: UKGov's National Living / Minimum Wage rate
     - RLW: Real living wage foundation's Real Living Wage rate
-    - STI: UKRI's minumum annual PhD stipend"""
+    - STI: UKRI's minumum annual PhD stipend
+    - GRAD: UKGov's average graduate salary
+    """
 
     NLW = "nmw"
     RLW = "rlw"
     STP = "stipend"
+    GRAD = "grad_mean"
 
 
 def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path, base_year: int) -> pd.DataFrame:
@@ -60,6 +63,11 @@ def net_income_df(df: pd.DataFrame, wage: Wage, input_path: Path, base_year: int
 
         case Wage.STP:
             net_income = df["stipend"]
+        case  Wage.GRAD:
+            gross_annual = df[f'{wage}']
+            income_tax = (gross_annual - df["allowance"])*0.2
+            nat_ins = 600
+            net_income = gross_annual - income_tax - nat_ins - df["counctax"]
 
     # Inflation adjust the income to find its real value today (in base year)
     real_income = net_income * real_mult(base_year, input_path)
