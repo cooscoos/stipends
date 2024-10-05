@@ -1,117 +1,57 @@
 """Module to create plots for streamlit pages."""
 
-import pandas as pd
-import altair as alt
-from lib import taxinflate
 from pathlib import Path
-from lib.taxinflate import Wage
 
-from typing import Tuple
-
+import altair as alt
 import folium
 from folium.features import GeoJsonTooltip
 import geopandas as gpd
-
+import pandas as pd
 import streamlit as st
 
-# Time offsets that apply to each income type. See the ts_method.md for justification.
-TIME_OFFSETS = {
-    'NLW': 3+0,    # Start of April(m=+3 months after January) + immediate implementation (i=+0)
-    'RLW': 10+6,   # End of October(m=+10) + 6 month implementation
-    'Stipend': 7+0,  # Start of August(m=+7) + immediate implementation
-    'Graduate': +6,  # median salary data is for the middle of the year
-    'Non-Graduate': +6,
-    'Postgraduate': +6
-}
 
-
-def add_time_offset(row):
-    """Adjusts the year of a given row to the correct date based on the income type."""
-    offset = TIME_OFFSETS.get(row['income_type'], 0)
-    return row['year'] + pd.DateOffset(months=offset)
-
-
-@st.cache_data(ttl=3600) # Cache data and graphs for 1 hour
-def time_series(input_path: Path, base_year: int) -> Tuple[alt.Chart, pd.DataFrame]:
-    """Returns an altair chart: a time-series of real income from PhD stipends and salaried work.
+@st.cache_data(ttl=3600)  # Cache data and graphs for 1 hour
+def time_series_plot(df: pd.DataFrame, min_y: float, max_y: float,
+                     chart_title: str) -> alt.Chart:
+    """Returns an altair chart time-series of real income from PhD stipends
+    and salaried work based on the input `df`. Chart y-axis runs from `min_y`
+    to `max_y`, chart is titled with `chart_title`.
     Caches data for one hour after reading in once from the input directory.
-
-    Parameters
-    -------
-    input_path: Path
-        Path to input data directory
-
-    base_year: int
-        The year to adjust real value to (usually the present year)
-
-    Returns
-    -------
-    alt.Chart time-series.
-    pd.DataFrame: the data used to create the time-series.
     """
 
-    wage_file = input_path / "UK_wage_tax.csv"
-    input_df = pd.read_csv(wage_file, header=1, index_col=0)
+    # Define chart properties
+    chart_height = 600
+    x_axis_title = 'Date'
+    y_axis_title = "Real annual net income (£)"
+    legend_title = "Income type"
+    tooltip_date_format = '%m/%Y'
+    tooltip_date_title = 'Date'
+    tooltip_income_title = 'Income'
 
-    # Read in and handle the graduate data
-    # read in yearly_salaries_by_gender2_200723.csv
-    grad_df = pd.read_csv(input_path / "yearly_salaries_by_gender2_200723.csv")
-
-    # remove gender=Male and gender=Female rows
-    grad_df = grad_df[grad_df['gender'].apply(lambda x: x not in ['Male', 'Female'])]
-
-    # only keep age group 21-30
-    grad_df = grad_df[grad_df['age_group'] == '21-30']
-
-    # only keep time_period, graduate_type and median columns
-    grad_df = grad_df[['time_period', 'graduate_type', 'median']]
-
-    grad_df = grad_df.pivot(index='time_period', columns='graduate_type', values='median').reset_index()
-
-    # rename time period to time
-    grad_df.rename(columns={'time_period': 'year'}, inplace=True)
-    grad_df = grad_df.set_index('year')
-
-    #merge input_df and graddf on year
-    input_df = input_df.merge(grad_df, left_index=True, right_index=True)
-
-
-    df = pd.DataFrame()
-    df["NLW"] = taxinflate.net_income_df(input_df, Wage.NLW, input_path, base_year)
-    df["RLW"] = taxinflate.net_income_df(input_df, Wage.RLW, input_path, base_year)
-    df["Stipend"] = taxinflate.net_income_df(input_df, Wage.STP, input_path, base_year)
-    df["Graduate"] = taxinflate.net_income_df(input_df, Wage.GRAD, input_path, base_year)
-    df["Non-Graduate"] = taxinflate.net_income_df(input_df, Wage.NONGRAD, input_path, base_year)
-    df["Postgraduate"] = taxinflate.net_income_df(input_df, Wage.POSTGRAD, input_path, base_year)
-
-    # Convert wide-form dataframe to the long-form preferred by altair
-    df["year"] = df.index
-    df = df.melt(id_vars='year',var_name="income_type",value_name="income")
-
-    # Adjust the year to the correct date using an offset based on the income type
-    df['year'] = pd.to_datetime(df['year'], format='%Y')
-    df['midpoint_datetime'] = df.apply(add_time_offset, axis=1)
-
-    # Define a time-series chart
-    # Info on type notation: https://altair-viz.github.io/altair-tutorial/notebooks/02-Simple-Charts.html
-    c = alt.Chart(df,height=450).mark_line(
+    # Define chart
+    c = alt.Chart(df, height=chart_height).mark_line(
         point=alt.OverlayMarkDef(filled=False, fill="white")
     ).encode(
-        x=alt.X('midpoint_datetime:T', axis=alt.Axis(format='%Y'), title='Date'),
+        x=alt.X('midpoint_datetime:T',
+                axis=alt.Axis(format='%Y'),
+                title=x_axis_title),
         y=alt.Y('income:Q',
-                axis=alt.Axis(title="Real annual net income (£)"),
-                scale=alt.Scale(domain=(12000,32000))
-                ),
-        color=alt.Color('income_type:N', legend=alt.Legend(title="Income type")),
-        tooltip=[alt.Tooltip('midpoint_datetime:T', format='%m/%Y', title='Date'),
-                alt.Tooltip('income:Q', title='Income')]
+                axis=alt.Axis(title=y_axis_title),
+                scale=alt.Scale(domain=(min_y, max_y))),
+        color=alt.Color('income_type:N',
+                        legend=alt.Legend(title=legend_title)),
+        tooltip=[
+            alt.Tooltip('midpoint_datetime:T',
+                        format=tooltip_date_format,
+                        title=tooltip_date_title),
+            alt.Tooltip('income:Q',
+                        title=tooltip_income_title)
+        ]
     ).properties(
-        title=f"Inflation adjusted to {base_year}"
+        title=chart_title
     )
 
-    return (c, df)
-
-
+    return c
 
 
 def maps(df: pd.DataFrame, column_name: str, legend_name: str, input_path: Path) -> folium.Map:
